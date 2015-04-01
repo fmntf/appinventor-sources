@@ -6124,10 +6124,23 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Error on Fusion Tables query")
   @Description("")
   String FusionTablesStandardErrorMessage();
+  
+  // =========== UDOO
+  @DefaultMessage("PinNumber")
+  @Description("")
+  String PinNumberProperties();
+
+  @DefaultMessage("Direction")
+  @Description("")
+  String DirectionProperties();
 
   @DefaultMessage("SelectionColor")
   @Description("")
   String SelectionColorProperties();
+  
+  @DefaultMessage("SetValue")
+  @Description("")
+  String SetValueMethods();
 
   // Missing translations from 4/8/2015 -- Should sort into appropriate place
 
@@ -6243,5 +6256,4 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Reload")
   @Description("")
   String reloadWindow();
-
 }

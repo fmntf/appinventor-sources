@@ -178,6 +178,7 @@ public final class Compiler {
   private final PrintStream err;
   private final PrintStream userErrors;
 
+  private static boolean isUdoo = true;
   private File libsDir; // The directory that will contain any native libraries for packaging
   private String dexCacheDir;
   private boolean hasSecondDex = false; // True if classes2.dex should be added to the APK
@@ -396,6 +397,11 @@ public final class Compiler {
         minSDK = LEVEL_GINGERBREAD_MR1;
       }
 
+      // ADK requires SDK 12
+      if (isUdoo) {
+        minSDK = 12;
+      }
+
       // make permissions unique by putting them in one set
       Set<String> permissions = Sets.newHashSet();
       for (Set<String> compPermissions : permissionsNeeded.values()) {
@@ -415,6 +421,10 @@ public final class Compiler {
       // the specified SDK version.  We right now support building for minSDK 4.
       // We might also want to allow users to specify minSdk version or targetSDK version.
       out.write("  <uses-sdk android:minSdkVersion=\"" + minSDK + "\" />\n");
+
+      if (isUdoo) {
+        out.write("<uses-feature android:name=\"android.hardware.usb.accessory\" />");
+      }
 
       out.write("  <application ");
 
@@ -479,6 +489,15 @@ public final class Compiler {
 
         if (simpleCompTypes.contains("com.google.appinventor.components.runtime.NearField") &&
             !isForCompanion && isMain) {
+
+          if (isUdoo) {
+              out.write("<intent-filter>");
+              out.write("  <action android:name=\"android.hardware.usb.action.USB_DEVICE_ATTACHED\" />");
+              out.write("  <action android:name=\"android.hardware.usb.action.USB_DEVICE_DETACHED\" />");
+              out.write("</intent-filter>");
+              out.write("<meta-data android:name=\"android.hardware.usb.action.USB_DEVICE_ATTACHED\" android:resource=\"@xml/accessory_filter\"/>");
+          }
+
           //  make the form respond to NDEF_DISCOVERED
           //  this will trigger the form's onResume method
           //  For now, we're handling text/plain only,but we can add more and make the Nearfield
@@ -597,6 +616,20 @@ public final class Compiler {
       return false;
     }
     setProgress(10);
+
+    if (isUdoo) {
+      File xmlDir = createDirectory(resDir, "xml");
+      File file = new File(xmlDir, "accessory_filter.xml");
+      String usbRes = "<?xml version=\"1.0\" encoding=\"utf-8\"?><resources><usb-accessory manufacturer=\"UDOO\" model=\"AppInventor\" version=\"1.0\" /></resources>";
+      try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(usbRes);
+        writer.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+      }
+    }
 
     // Create anim directory and animation xml files
     out.println("________Creating animation xml");

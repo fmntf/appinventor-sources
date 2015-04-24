@@ -60,9 +60,9 @@ import java.util.Map;
  * @author markf@google.com (Mark Friedman)
  * @author lizlooney@google.com (Liz Looney)
  */
-public final class YaFormEditor extends SimpleEditor implements FormChangeListener {
+public class YaFormEditor extends SimpleEditor implements FormChangeListener {
 
-  private static class FileContentHolder {
+  protected static class FileContentHolder {
     private String content;
 
     FileContentHolder(String content) {
@@ -79,30 +79,30 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   }
 
   // JSON parser
-  private static final JSONParser JSON_PARSER = new ClientJsonParser();
+  protected static final JSONParser JSON_PARSER = new ClientJsonParser();
 
-  private static final SimpleComponentDatabase COMPONENT_DATABASE =
+  protected static final SimpleComponentDatabase COMPONENT_DATABASE =
       SimpleComponentDatabase.getInstance();
 
-  private final YoungAndroidFormNode formNode;
+  protected final YoungAndroidFormNode formNode;
 
   // Flag to indicate when loading the file is completed. This is needed because building the mock
   // form from the file properties fires events that need to be ignored, otherwise the file will be
   // marked as being modified.
-  private boolean loadComplete;
+  protected boolean loadComplete;
 
   // References to other panels that we need to control.
-  private final SourceStructureExplorer sourceStructureExplorer;
+  protected SourceStructureExplorer sourceStructureExplorer;
 
   // Panels that are used as the content of the palette and properties boxes.
-  private final YoungAndroidPalettePanel palettePanel;
-  private final PropertiesPanel designProperties;
+  protected YoungAndroidPalettePanel palettePanel;
+  protected PropertiesPanel designProperties;
 
   // UI elements
-  private final SimpleVisibleComponentsPanel visibleComponentsPanel;
-  private final SimpleNonVisibleComponentsPanel nonVisibleComponentsPanel;
+  protected SimpleVisibleComponentsPanel visibleComponentsPanel;
+  protected SimpleNonVisibleComponentsPanel nonVisibleComponentsPanel;
 
-  private MockForm form;  // initialized lazily after the file is loaded from the ODE server
+  protected MockForm form;  // initialized lazily after the file is loaded from the ODE server
 
   // [lyn, 2014/10/13] Need to remember JSON initially loaded from .scm file *before* it is upgraded
   // by YoungAndroidFormUpgrader within upgradeFile. This JSON contains pre-upgrade component
@@ -110,7 +110,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   // This was unnecessary in AI Classic because the .blk file contained component version info
   // as well as the .scm file. But in AI2, the .bky file contains no component version info,
   // and we rely on the pre-upgraded .scm file for this info.
-  private String preUpgradeJsonString;
+  protected String preUpgradeJsonString;
 
 
   /**
@@ -123,7 +123,11 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     super(projectEditor, formNode);
 
     this.formNode = formNode;
-
+    initUi();
+  }
+  
+  protected void initUi()
+  {
     // Get reference to the source structure explorer
     sourceStructureExplorer =
         SourceStructureBox.getSourceStructureBox().getSourceStructureExplorer();
@@ -375,7 +379,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
    *                              file has upgraded and saved back to the ODE
    *                              server
    */
-  private void upgradeFile(FileContentHolder fileContentHolder,
+  protected void upgradeFile(FileContentHolder fileContentHolder,
       final Command afterUpgradeComplete) {
     JSONObject propertiesObject = YoungAndroidSourceAnalyzer.parseSourceFile(
         fileContentHolder.getFileContent(), JSON_PARSER);
@@ -404,7 +408,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     }
   }
 
-  private void onFileLoaded(String content) {
+  protected void onFileLoaded(String content) {
     JSONObject propertiesObject = YoungAndroidSourceAnalyzer.parseSourceFile(
         content, JSON_PARSER);
     form = createMockForm(propertiesObject.getProperties().get("Properties").asObject());
@@ -422,7 +426,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   /*
    * Parses the JSON properties and creates the form and its component structure.
    */
-  private MockForm createMockForm(JSONObject propertiesObject) {
+  protected MockForm createMockForm(JSONObject propertiesObject) {
     return (MockForm) createMockComponent(propertiesObject, null);
   }
 
@@ -430,7 +434,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
    * Parses the JSON properties and creates the component structure. This method is called
    * recursively for nested components. For the initial invocation parent shall be null.
    */
-  private MockComponent createMockComponent(JSONObject propertiesObject, MockContainer parent) {
+  protected MockComponent createMockComponent(JSONObject propertiesObject, MockContainer parent) {
     Map<String, JSONValue> properties = propertiesObject.getProperties();
 
     // Component name and type
@@ -492,7 +496,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
    * Updates the the whole designer: form, palette, source structure explorer,
    * assets list, and properties panel.
    */
-  private void loadDesigner() {
+  protected void loadDesigner() {
     form.refresh();
     MockComponent selectedComponent = form.getSelectedComponent();
 
@@ -527,14 +531,14 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   /*
    * Show the given component's properties in the properties panel.
    */
-  private void updatePropertiesPanel(MockComponent component) {
+  protected void updatePropertiesPanel(MockComponent component) {
     designProperties.setProperties(component.getProperties());
     // need to update the caption after the setProperties call, since
     // setProperties clears the caption!
     designProperties.setPropertiesCaption(component.getName());
   }
 
-  private void onFormStructureChange() {
+  protected void onFormStructureChange() {
     Ode.getInstance().getEditorManager().scheduleAutoSave(this);
 
     // Update source structure panel
@@ -543,7 +547,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     updatePhone();          // Push changes to the phone if it is connected
   }
 
-  private void populateComponentsMap(MockComponent component, Map<String, MockComponent> map) {
+  protected void populateComponentsMap(MockComponent component, Map<String, MockComponent> map) {
     EditableProperties properties = component.getProperties();
     map.put(properties.getPropertyValue("Name"), component);
     List<MockComponent> children = component.getChildren();
@@ -576,7 +580,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   /*
    * Encodes a component and its properties into a JSON encoded string.
    */
-  private void encodeComponentProperties(MockComponent component, StringBuilder sb) {
+  protected void encodeComponentProperties(MockComponent component, StringBuilder sb) {
     // The component encoding starts with component name and type
     String componentType = component.getType();
     EditableProperties properties = component.getProperties();
@@ -616,7 +620,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   /*
    * Clears the palette, source structure explorer, and properties panel.
    */
-  private void unloadDesigner() {
+  protected void unloadDesigner() {
     // The form can still potentially change if the blocks editor is displayed
     // so don't remove the formChangeListener.
 
@@ -641,7 +645,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   /*
    * Push changes to a connected phone (or emulator).
    */
-  private void updatePhone() {
+  protected void updatePhone() {
     YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
     YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
     blockEditor.onBlocksAreaChanged(getProjectId() + "_" + formNode.getFormName());

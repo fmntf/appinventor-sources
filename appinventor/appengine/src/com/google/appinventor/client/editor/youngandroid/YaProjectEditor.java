@@ -318,8 +318,14 @@ public final class YaProjectEditor extends ProjectEditor implements ProjectChang
   }
   
   private void addFormEditor(YoungAndroidFormNode formNode) {
-    final YaFormEditor newFormEditor = new YaFormEditor(this, formNode);
     final String formName = formNode.getFormName();
+    final YaFormEditor newFormEditor;
+    if (formName.equals("UDOO")) {
+        newFormEditor = new YaUdooBoardEditor(this, formNode);
+    } else {
+        newFormEditor = new YaFormEditor(this, formNode);
+    }
+    
     OdeLog.log("Adding form editor for " + formName);
     if (editorMap.containsKey(formName)) {
       // This happens if the blocks editor was already added.

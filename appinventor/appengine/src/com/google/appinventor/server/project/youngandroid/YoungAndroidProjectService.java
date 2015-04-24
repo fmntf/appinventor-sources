@@ -69,6 +69,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -182,6 +183,19 @@ public final class YoungAndroidProjectService extends CommonProjectService {
     final int lastDotPos = qualifiedName.lastIndexOf('.');
     String packageName = qualifiedName.split("\\.")[2];
     String formName = qualifiedName.substring(lastDotPos + 1);
+    
+    String compontents = "";
+    if (formName.equals("UDOO")) {
+        String[] sb = new String[54];
+        Random r = new Random();
+        for (int i=0; i<=53; i++) {
+            Integer uuid = r.nextInt();
+            sb[i] = "{\"$Name\":\"Pin" +i+ "\",\"$Type\":\"UdooGpio\",\"$Version\":\"1\",\"Uuid\":\"" +uuid+ "\",\"PinNumber\":\""+i+"\"}";
+        }
+        compontents = ",\"$Components\":["+StringUtils.join(",", sb)+"]";
+    }
+    
+    
     // The initial Uuid is set to zero here since (as far as we know) we can't get random numbers
     // in ode.shared.  This shouldn't actually matter since all Uuid's are random int's anyway (and
     // 0 was randomly chosen, I promise).  The TODO(user) in MockComponent.java indicates that
@@ -192,7 +206,7 @@ public final class YoungAndroidProjectService extends CommonProjectService {
         "{\"YaVersion\":\"" + YaVersion.YOUNG_ANDROID_VERSION + "\",\"Source\":\"Form\"," +
         "\"Properties\":{\"$Name\":\"" + formName + "\",\"$Type\":\"Form\"," +
         "\"$Version\":\"" + YaVersion.FORM_COMPONENT_VERSION + "\",\"Uuid\":\"" + 0 + "\"," +
-        "\"Title\":\"" + formName + "\",\"AppName\":\"" + packageName +"\"}}\n|#";
+        "\"Title\":\"" + formName + "\",\"AppName\":\"" + packageName +"\"" + compontents + "}}\n|#";
   }
 
   /**

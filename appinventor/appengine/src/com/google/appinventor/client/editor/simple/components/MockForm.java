@@ -36,12 +36,12 @@ import com.google.gwt.user.client.ui.TreeItem;
  * Mock Form component.
  *
  */
-public final class MockForm extends MockContainer {
+public class MockForm extends MockContainer {
 
   /*
    * Widget for the mock form title bar.
    */
-  private class TitleBar extends Composite {
+  protected class TitleBar extends Composite {
     private static final int HEIGHT = 24;
     
 
@@ -78,7 +78,7 @@ public final class MockForm extends MockContainer {
   /*
    * Widget for a mock phone status bar.
    */
-  private class PhoneBar extends Composite {
+  protected class PhoneBar extends Composite {
     private static final int HEIGHT = 24;
 
     // UI elements
@@ -107,47 +107,47 @@ public final class MockForm extends MockContainer {
    */
   public static final String TYPE = "Form";
 
-  private static final String VISIBLE_TYPE = "Screen";
+  protected static final String VISIBLE_TYPE = "Screen";
 
   // TODO(lizlooney) 320x480 is the resolution of the G1. Do we want to change this to the
   // resolution of the Nexus One?
-  private static final int PORTRAIT_WIDTH = 320;
-  private static final int PORTRAIT_HEIGHT = 480;
-  private static final int LANDSCAPE_WIDTH = 480;
-  private static final int LANDSCAPE_HEIGHT = 320;
+  protected int PORTRAIT_WIDTH = 320;
+  protected int PORTRAIT_HEIGHT = 480;
+  protected int LANDSCAPE_WIDTH = 480;
+  protected int LANDSCAPE_HEIGHT = 320;
 
   // Property names
-  private static final String PROPERTY_NAME_TITLE = "Title";
-  private static final String PROPERTY_NAME_SCREEN_ORIENTATION = "ScreenOrientation";
-  private static final String PROPERTY_NAME_SCROLLABLE = "Scrollable";
-  private static final String PROPERTY_NAME_ICON = "Icon";
-  private static final String PROPERTY_NAME_VCODE = "VersionCode";
-  private static final String PROPERTY_NAME_VNAME = "VersionName";
-  private static final String PROPERTY_NAME_ANAME = "AppName";
+  protected static final String PROPERTY_NAME_TITLE = "Title";
+  protected static final String PROPERTY_NAME_SCREEN_ORIENTATION = "ScreenOrientation";
+  protected static final String PROPERTY_NAME_SCROLLABLE = "Scrollable";
+  protected static final String PROPERTY_NAME_ICON = "Icon";
+  protected static final String PROPERTY_NAME_VCODE = "VersionCode";
+  protected static final String PROPERTY_NAME_VNAME = "VersionName";
+  protected static final String PROPERTY_NAME_ANAME = "AppName";
 
   // Form UI components
   AbsolutePanel formWidget;
   ScrollPanel scrollPanel;
-  private TitleBar titleBar;
-  private MockComponent selectedComponent;
+  protected TitleBar titleBar;
+  protected MockComponent selectedComponent;
 
-  private int screenWidth;
-  private int screenHeight;
-  private int usableScreenHeight;
+  protected int screenWidth;
+  protected int screenHeight;
+  protected int usableScreenHeight;
 
   // Set of listeners for any changes of the form
   final HashSet<FormChangeListener> formChangeListeners = new HashSet<FormChangeListener>();
 
   // Don't access the verticalScrollbarWidth field directly. Use getVerticalScrollbarWidth().
-  private static int verticalScrollbarWidth;
+  protected static int verticalScrollbarWidth;
 
-  private MockFormLayout myLayout;
+  protected MockFormLayout myLayout;
   
   // flag to control attempting to enable/disable vertical
   // alignment when scrollable property is changed
-  private boolean initialized = false;
+  protected boolean initialized = false;
   
-  private YoungAndroidVerticalAlignmentChoicePropertyEditor myVAlignmentPropertyEditor;
+  protected YoungAndroidVerticalAlignmentChoicePropertyEditor myVAlignmentPropertyEditor;
 
   public static final String PROPERTY_NAME_HORIZONTAL_ALIGNMENT = "AlignHorizontal";
   public static final String PROPERTY_NAME_VERTICAL_ALIGNMENT = "AlignVertical";
@@ -164,6 +164,11 @@ public final class MockForm extends MockContainer {
     // but Java won't let me do that.
 
     super(editor, TYPE, images.form(), MockFormHelper.makeLayout());
+    initUi();
+  }
+  
+  protected void initUi()
+  {
     // Note(hal): There better not be any calls to MockFormHelper before the
     // next instruction.  Note that the Helper methods are synchronized to avoid possible
     // future problems if we ever have threads creating forms in parallel.
@@ -181,6 +186,8 @@ public final class MockForm extends MockContainer {
     scrollPanel = new ScrollPanel(rootPanel);
     formWidget.add(scrollPanel);
 
+    OdeLog.log("Dimensione: " + PORTRAIT_WIDTH);
+    OdeLog.log(this.getClass().getName());
     screenWidth = PORTRAIT_WIDTH;
     screenHeight = PORTRAIT_HEIGHT;
     usableScreenHeight = screenHeight - PhoneBar.HEIGHT - TitleBar.HEIGHT;
@@ -208,7 +215,7 @@ public final class MockForm extends MockContainer {
   /*
    * Resizes the scrollPanel and formWidget based on the screen size.
    */
-  private void resizePanels() {
+  protected void resizePanels() {
     // Set the scrollPanel's width to account for the width of the vertical scrollbar.
     int vertScrollbarWidth = getVerticalScrollbarWidth();
     scrollPanel.setPixelSize(screenWidth + vertScrollbarWidth, usableScreenHeight);
@@ -218,7 +225,7 @@ public final class MockForm extends MockContainer {
   /*
    * Returns the width of a vertical scroll bar, calculating it if necessary.
    */
-  private static int getVerticalScrollbarWidth() {
+  protected static int getVerticalScrollbarWidth() {
     // We only calculate the vertical scroll bar width once, then we store it in the static field
     // verticalScrollbarWidth. If the field is non-zero, we don't need to calculate it again.
     if (verticalScrollbarWidth == 0) {
@@ -281,7 +288,7 @@ public final class MockForm extends MockContainer {
   }
 
   @Override
-  public final MockForm getForm() {
+  public MockForm getForm() {
     return this;
   }
 
@@ -348,7 +355,7 @@ public final class MockForm extends MockContainer {
   /*
    * Sets the form's BackgroundColor property to a new value.
    */
-  private void setBackgroundColorProperty(String text) {
+  protected void setBackgroundColorProperty(String text) {
     if (MockComponentsUtil.isNoneColor(text)) {
       text = "&HFF000000";  // black
     } else if (MockComponentsUtil.isDefaultColor(text)) {
@@ -360,7 +367,7 @@ public final class MockForm extends MockContainer {
   /*
    * Sets the form's BackgroundImage property to a new value.
    */
-  private void setBackgroundImageProperty(String text) {
+  protected void setBackgroundImageProperty(String text) {
     String url = convertImagePropertyValueToUrl(text);
     if (url == null) {
       // text was not recognized as an asset.
@@ -369,7 +376,7 @@ public final class MockForm extends MockContainer {
     MockComponentsUtil.setWidgetBackgroundImage(rootPanel, url);
   }
 
-  private void setScreenOrientationProperty(String text) {
+  protected void setScreenOrientationProperty(String text) {
     if (hasProperty(PROPERTY_NAME_WIDTH) && hasProperty(PROPERTY_NAME_HEIGHT) &&
         hasProperty(PROPERTY_NAME_SCROLLABLE)) {
       if (text.equalsIgnoreCase("landscape")) {
@@ -390,7 +397,7 @@ public final class MockForm extends MockContainer {
     }
   }
 
-  private void setScrollableProperty(String text) {
+  protected void setScrollableProperty(String text) {
     if (hasProperty(PROPERTY_NAME_HEIGHT)) {
       final boolean scrollable = Boolean.parseBoolean(text);
       int heightHint = scrollable ? LENGTH_PREFERRED : usableScreenHeight;
@@ -398,7 +405,7 @@ public final class MockForm extends MockContainer {
     }
   }
 
-  private void setIconProperty(String icon) {
+  protected void setIconProperty(String icon) {
     // The Icon property actually applies to the application and is only visible on Screen1.
     // When we load a form that is not Screen1, this method will be called with the default value
     // for icon (empty string). We need to ignore that.
@@ -409,7 +416,7 @@ public final class MockForm extends MockContainer {
     }
   }
 
-  private void setVCodeProperty(String vcode) {
+  protected void setVCodeProperty(String vcode) {
     // The VersionCode property actually applies to the application and is only visible on Screen1.
     // When we load a form that is not Screen1, this method will be called with the default value
     // for VersionCode (1). We need to ignore that.
@@ -420,7 +427,7 @@ public final class MockForm extends MockContainer {
     }
   }
 
-  private void setVNameProperty(String vname) {
+  protected void setVNameProperty(String vname) {
     // The VersionName property actually applies to the application and is only visible on Screen1.
     // When we load a form that is not Screen1, this method will be called with the default value
     // for VersionName (1.0). We need to ignore that.
@@ -431,7 +438,7 @@ public final class MockForm extends MockContainer {
     }
   }
 
-  private void setANameProperty(String aname) {
+  protected void setANameProperty(String aname) {
     // The AppName property actually applies to the application and is only visible on Screen1.
     // When we load a form that is not Screen1, this method will be called with the default value
     if (editor.isScreen1()) {
@@ -444,7 +451,7 @@ public final class MockForm extends MockContainer {
   /**
    * Forces a re-layout of the child components of the container.
    */
-  public final void refresh() {
+  public void refresh() {
     Map<MockComponent, LayoutInfo> layoutInfoMap = new HashMap<MockComponent, LayoutInfo>();
 
     collectLayoutInfos(layoutInfoMap, this);
@@ -470,7 +477,7 @@ public final class MockForm extends MockContainer {
    * LayoutInfo's width/height may be set to fill parent. This will be resolved
    * when layoutChildren is called.
    */
-  private static void collectLayoutInfos(Map<MockComponent, LayoutInfo> layoutInfoMap,
+  protected static void collectLayoutInfos(Map<MockComponent, LayoutInfo> layoutInfoMap,
       MockComponent component) {
 
     LayoutInfo layoutInfo = component.createLayoutInfo(layoutInfoMap);
@@ -578,7 +585,7 @@ public final class MockForm extends MockContainer {
    * There will always be exactly one component selected in a form
    * at any given time.
    */
-  public final void setSelectedComponent(MockComponent newSelectedComponent) {
+  public void setSelectedComponent(MockComponent newSelectedComponent) {
     MockComponent oldSelectedComponent = selectedComponent;
 
     if (newSelectedComponent == null) {
@@ -596,7 +603,7 @@ public final class MockForm extends MockContainer {
     newSelectedComponent.onSelectedChange(true);
   }
 
-  public final MockComponent getSelectedComponent() {
+  public MockComponent getSelectedComponent() {
     return selectedComponent;
   }
 
@@ -626,8 +633,8 @@ public final class MockForm extends MockContainer {
     } else if (propertyName.equals(PROPERTY_NAME_SCROLLABLE)) {
       setScrollableProperty(newValue);
       adjustAlignmentDropdowns();
-    } else if (propertyName.equals(PROPERTY_NAME_TITLE)) {
-      titleBar.changeTitle(newValue);
+//    } else if (propertyName.equals(PROPERTY_NAME_TITLE)) {
+//      titleBar.changeTitle(newValue);
     } else if (propertyName.equals(PROPERTY_NAME_ICON)) {
       setIconProperty(newValue);
     } else if (propertyName.equals(PROPERTY_NAME_VCODE)) {
@@ -647,13 +654,13 @@ public final class MockForm extends MockContainer {
   
   // enableAndDisable It should not be called until the component is initialized.
   // Otherwise, we'll get NPEs in trying to use myAlignmentPropertyEditor.
-  private void adjustAlignmentDropdowns() {
+  protected void adjustAlignmentDropdowns() {
     if (initialized) enableAndDisableDropdowns();
   }
 
   // Don't forget to call this on initialization!!!
   // If scrollable is True, the selector for vertical alignment should be disabled. 
-  private void enableAndDisableDropdowns() {
+  protected void enableAndDisableDropdowns() {
     String scrollable = properties.getProperty(PROPERTY_NAME_SCROLLABLE).getValue();
     if (scrollable.equals("True")) {
       myVAlignmentPropertyEditor.disable();

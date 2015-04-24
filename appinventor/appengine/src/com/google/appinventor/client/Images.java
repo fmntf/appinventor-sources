@@ -69,6 +69,12 @@ public interface Images extends Resources {
   ImageResource phonebar();
 
   /**
+   * UDOO Quad Board
+   */
+  @Source("com/google/appinventor/images/udooquad.png")
+  ImageResource udooquad();
+
+  /**
    * Designer palette item: question mark for more component information
    */
   @Source("com/google/appinventor/images/help.png")

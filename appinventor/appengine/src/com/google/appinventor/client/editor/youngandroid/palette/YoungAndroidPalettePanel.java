@@ -42,6 +42,7 @@ import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroid
 import com.google.appinventor.client.explorer.project.ComponentDatabaseChangeListener;
 import com.google.appinventor.client.properties.json.ClientJsonParser;
 import com.google.appinventor.client.widgets.properties.CountryChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTransportsChoicePropertyEditor;
 import com.google.appinventor.client.widgets.properties.FloatPropertyEditor;
 import com.google.appinventor.client.widgets.properties.IntegerPropertyEditor;
 import com.google.appinventor.client.widgets.properties.LanguageChoicePropertyEditor;
@@ -251,6 +252,8 @@ public class YoungAndroidPalettePanel extends Composite implements SimplePalette
       return new NonNegativeFloatPropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_GPIO_DIRECTIONS)) {
       return new YoungAndroidGpioDirectionsChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TRANSPORTS)) {
+      return new YoungAndroidUdooTransportsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_INTEGER)) {
       return new NonNegativeIntegerPropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SCREEN_ORIENTATION)) {

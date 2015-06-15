@@ -490,7 +490,7 @@ public final class Compiler {
         if (simpleCompTypes.contains("com.google.appinventor.components.runtime.NearField") &&
             !isForCompanion && isMain) {
 
-          if (isUdoo) {
+          if (isMain && isUdoo) {
               out.write("<intent-filter>");
               out.write("  <action android:name=\"android.hardware.usb.action.USB_DEVICE_ATTACHED\" />");
               out.write("  <action android:name=\"android.hardware.usb.action.USB_DEVICE_DETACHED\" />");

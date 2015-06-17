@@ -64,6 +64,8 @@ public final class ErrorMessages {
   public static final int ERROR_NXT_INVALID_GENERATE_COLOR = 419;
   // UDOO errors
   public static final int ERROR_UDOO_ADK_UNAVAILABLE = 450;
+  public static final int ERROR_UDOO_ADK_NO_PERMISSIONS = 451;
+  public static final int ERROR_UDOO_ADK_NO_DEVICE = 452;
   // Bluetooth errors
   public static final int ERROR_BLUETOOTH_NOT_AVAILABLE = 501;
   public static final int ERROR_BLUETOOTH_NOT_ENABLED = 502;
@@ -320,6 +322,13 @@ public final class ErrorMessages {
         "Cannot understant motor port: %s");
     errorMessages.put(ERROR_EV3_ILLEGAL_SENSOR_PORT,
         "Cannot understant sensor port: %s");
+    // UDOO errors
+    errorMessages.put(ERROR_UDOO_ADK_UNAVAILABLE,
+        "Android ADK not available. Local ADK connections are available only on UDOO boards.");
+    errorMessages.put(ERROR_UDOO_ADK_NO_PERMISSIONS,
+        "Permission denied to access ADK accessory.");
+    errorMessages.put(ERROR_UDOO_ADK_NO_DEVICE,
+        "No ADK accessory found. Is the Arduino sketch uploaded?");
     // bluetooth errors
     errorMessages.put(ERROR_BLUETOOTH_NOT_AVAILABLE,
         "Bluetooth is not available.");

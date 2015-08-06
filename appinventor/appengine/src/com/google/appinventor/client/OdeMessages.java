@@ -6534,6 +6534,14 @@ public interface OdeMessages extends Messages {
   @Description("")
   String pinModeMethods();
   
+  @DefaultMessage("attachInterrupt")
+  @Description("")
+  String attachInterruptMethods();
+  
+  @DefaultMessage("InterruptFired")
+  @Description("")
+  String InterruptFiredEvents();
+  
   @DefaultMessage("DataReady")
   @Description("")
   String DataReadyEvents();

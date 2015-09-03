@@ -6133,6 +6133,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Direction")
   @Description("")
   String DirectionProperties();
+  
+  @DefaultMessage("UdooArduino")
+  @Description("")
+  String UdooArduinoProperties();
 
   @DefaultMessage("SelectionColor")
   @Description("")

@@ -42,6 +42,7 @@ import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroid
 import com.google.appinventor.client.explorer.project.ComponentDatabaseChangeListener;
 import com.google.appinventor.client.properties.json.ClientJsonParser;
 import com.google.appinventor.client.widgets.properties.CountryChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooColorSensorsChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTempHumSensorsChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTransportsChoicePropertyEditor;
 import com.google.appinventor.client.widgets.properties.FloatPropertyEditor;
@@ -260,6 +261,8 @@ public class YoungAndroidPalettePanel extends Composite implements SimplePalette
           Collections.singleton("UdooArduino"));
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TEMP_HUM_SENSORS)) {
       return new YoungAndroidUdooTempHumSensorsChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_COLOR_SENSORS)) {
+      return new YoungAndroidUdooColorSensorsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_INTEGER)) {
       return new NonNegativeIntegerPropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SCREEN_ORIENTATION)) {

@@ -721,7 +721,7 @@ public final class Compiler {
 
       // ADK requires SDK 12
       if (isUdoo) {
-        minSDK = 12;
+        minSDK = "12";
       }
 
       // make permissions unique by putting them in one set

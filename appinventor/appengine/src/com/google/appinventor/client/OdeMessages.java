@@ -6181,6 +6181,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Sensor")
   @Description("")
   String SensorProperties();
+  
+  @DefaultMessage("Self Picture")
+  @Description("")
+  String SelfPictureMethods();
 
   // Missing translations from 4/8/2015 -- Should sort into appropriate place
 

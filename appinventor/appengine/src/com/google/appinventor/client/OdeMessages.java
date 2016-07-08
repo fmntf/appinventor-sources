@@ -6157,6 +6157,26 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("SetValue")
   @Description("")
   String SetValueMethods();
+  
+  @DefaultMessage("Remote Address")
+  @Description("")
+  String RemoteAddressProperties();
+  
+  @DefaultMessage("Remote Port")
+  @Description("")
+  String RemotePortProperties();
+  
+  @DefaultMessage("Remote Secret")
+  @Description("")
+  String RemoteSecretProperties();
+  
+  @DefaultMessage("Transport")
+  @Description("")
+  String TransportProperties();
+  
+  @DefaultMessage("Sensor")
+  @Description("")
+  String SensorProperties();
 
   // Missing translations from 4/8/2015 -- Should sort into appropriate place
 
@@ -6251,10 +6271,6 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("ReadSensor")
   @Description("")
   String ReadSensorMethods();
-  
-  @DefaultMessage("SetValue")
-  @Description("")
-  String SetValueMethods();
 
   @DefaultMessage("ExtraKey and ExtraValue are deprecated and will not be supported. " +
       "Please use the new Extras property in Blocks.\n")

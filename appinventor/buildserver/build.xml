@@ -168,7 +168,7 @@
        ===================================================================== -->
   <target name="CheckPlayApp"
           depends="GenPlayAppSrcZip,BuildServer">
-    <uptodate property="PlayApp.uptodate" targetfile="${public.build.dir}/MIT AI2 Companion.apk">
+    <uptodate property="PlayApp.uptodate" targetfile="${public.build.dir}/UAPPI Companion.apk">
       <srcfiles file="${local.build.dir}/aiplayapp.zip"/>
       <srcfiles dir="${run.lib.dir}" includes="*.jar"/>
     </uptodate>
@@ -206,10 +206,10 @@
   <target name="installplay"
           depends="PlayApp">
     <exec executable="adb" failonerror="false">
-      <arg line="uninstall edu.mit.appinventor.aicompanion3" />
+      <arg line="uninstall org.udoo.appinventor.aicompanion3" />
     </exec>
     <exec executable="adb" failonerror="true">
-      <arg line='install "${public.build.dir}/MIT AI2 Companion.apk"' />
+      <arg line='install "${public.build.dir}/UAPPI Companion.apk"' />
     </exec>
   </target>
 

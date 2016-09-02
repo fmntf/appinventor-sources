@@ -356,7 +356,7 @@ public interface OdeMessages extends Messages {
 
   // Used in Ode.java
 
-  @DefaultMessage("MIT App Inventor")
+  @DefaultMessage("UDOO App Inventor")
   @Description("Title for App Inventor")
   String titleYoungAndroid();
 

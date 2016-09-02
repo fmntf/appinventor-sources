@@ -397,9 +397,9 @@ public final class Compiler {
         minSDK = LEVEL_GINGERBREAD_MR1;
       }
 
-      // ADK requires SDK 12
+      // ADK requires SDK 12+
       if (isUdoo) {
-        minSDK = "12";
+        minSDK = "21";
       }
 
       // make permissions unique by putting them in one set
@@ -420,10 +420,10 @@ public final class Compiler {
       // The market will use the following to filter apps shown to devices that don't support
       // the specified SDK version.  We right now support building for minSDK 4.
       // We might also want to allow users to specify minSdk version or targetSDK version.
-      out.write("  <uses-sdk android:minSdkVersion=\"" + minSDK + "\" />\n");
+      out.write("  <uses-sdk android:minSdkVersion=\"" + minSDK + "\" android:targetSdkVersion=\"21\" />\n");
 
       if (isUdoo) {
-        out.write("<uses-feature android:name=\"android.hardware.usb.accessory\" />");
+        out.write("<uses-feature android:name=\"android.hardware.usb.accessory\" android:required=\"true\" />");
       }
 
       out.write("  <application ");
@@ -447,6 +447,10 @@ public final class Compiler {
         out.write("android:name=\"com.google.appinventor.components.runtime.multidex.MultiDexApplication\" ");
       }
       out.write(">\n");
+      
+      if (isUdoo) {
+        out.write("<uses-library android:name=\"com.android.future.usb.accessory\" />");
+      }
 
       for (Project.SourceDescriptor source : project.getSources()) {
         String formClassName = source.getQualifiedName();
@@ -486,18 +490,17 @@ public final class Compiler {
           out.write("        <category android:name=\"android.intent.category.LAUNCHER\" />\n");
         }
         out.write("      </intent-filter>\n");
+        
+        if (isMain && isUdoo) {
+            out.write("<intent-filter>");
+            out.write("  <action android:name=\"android.hardware.usb.action.USB_ACCESSORY_ATTACHED\" />");
+            out.write("  <action android:name=\"android.hardware.usb.action.USB_ACCESSORY_DETACHED\" />");
+            out.write("</intent-filter>");
+            out.write("<meta-data android:name=\"android.hardware.usb.action.USB_ACCESSORY_ATTACHED\" android:resource=\"@xml/usb_accessory_filter\"/>");
+        }
 
         if (simpleCompTypes.contains("com.google.appinventor.components.runtime.NearField") &&
             !isForCompanion && isMain) {
-
-          if (isMain && isUdoo) {
-              out.write("<intent-filter>");
-              out.write("  <action android:name=\"android.hardware.usb.action.USB_DEVICE_ATTACHED\" />");
-              out.write("  <action android:name=\"android.hardware.usb.action.USB_DEVICE_DETACHED\" />");
-              out.write("</intent-filter>");
-              out.write("<meta-data android:name=\"android.hardware.usb.action.USB_DEVICE_ATTACHED\" android:resource=\"@xml/accessory_filter\"/>");
-          }
-
           //  make the form respond to NDEF_DISCOVERED
           //  this will trigger the form's onResume method
           //  For now, we're handling text/plain only,but we can add more and make the Nearfield
@@ -619,7 +622,7 @@ public final class Compiler {
 
     if (isUdoo) {
       File xmlDir = createDirectory(resDir, "xml");
-      File file = new File(xmlDir, "accessory_filter.xml");
+      File file = new File(xmlDir, "usb_accessory_filter.xml");
       String usbRes = "<?xml version=\"1.0\" encoding=\"utf-8\"?><resources><usb-accessory manufacturer=\"UDOO\" model=\"AppInventor\" version=\"1.0\" /></resources>";
       try {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));

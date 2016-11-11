@@ -1086,4 +1086,6 @@ public class YaVersion {
   public static final int UDOO_COLOR_SENSOR_COMPONENT_VERSION = 1;
   public static final int UDOO_SERVO_COMPONENT_VERSION = 1;
   public static final int UDOO_CAMERA_COMPONENT_VERSION = 1;
+  
+  public static final int MACHINELEARNING_SVM_COMPONENT_VERSION = 1;
 }

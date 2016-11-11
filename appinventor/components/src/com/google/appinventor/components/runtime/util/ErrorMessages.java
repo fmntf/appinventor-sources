@@ -69,6 +69,9 @@ public final class ErrorMessages {
   public static final int ERROR_UDOO_ADK_NO_CONNECTION = 453;
   public static final int ERROR_UDOO_TCP_NO_CONNECTION = 454;
   public static final int ERROR_UDOO_SERVO_WRITE = 455;
+  // SVM
+  public static final int ERROR_SVM_NO_VECTORS = 480;
+  public static final int ERROR_SVM_NO_MODEL = 481;
   // Bluetooth errors
   public static final int ERROR_BLUETOOTH_NOT_AVAILABLE = 501;
   public static final int ERROR_BLUETOOTH_NOT_ENABLED = 502;
@@ -338,6 +341,11 @@ public final class ErrorMessages {
         "Could not create TCP connection.");
     errorMessages.put(ERROR_UDOO_SERVO_WRITE,
         "Servo accepts only degrees between 0 and 180.");
+    // SVM errors
+    errorMessages.put(ERROR_SVM_NO_VECTORS,
+        "You must provide example vectors before training your model.");
+    errorMessages.put(ERROR_SVM_NO_MODEL,
+        "Train a model before saving it.");
     // bluetooth errors
     errorMessages.put(ERROR_BLUETOOTH_NOT_AVAILABLE,
         "Bluetooth is not available.");

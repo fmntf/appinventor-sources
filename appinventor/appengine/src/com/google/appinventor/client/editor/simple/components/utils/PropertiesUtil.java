@@ -33,6 +33,8 @@ import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroid
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSensorDistIntervalChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSensorTimeIntervalChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSizingChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSvmKernelTypeChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSvmTypeChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidTextReceivingPropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidToastLengthChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooColorSensorsChoicePropertyEditor;
@@ -224,6 +226,10 @@ public class PropertiesUtil {
       return new YoungAndroidUdooTempHumSensorsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_COLOR_SENSORS)) {
       return new YoungAndroidUdooColorSensorsChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SVM_TYPES)) {
+      return new YoungAndroidSvmTypeChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SVM_KERNEL_TYPES)) {
+      return new YoungAndroidSvmKernelTypeChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_INTEGER)) {
       return new NonNegativeIntegerPropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SCREEN_ORIENTATION)) {

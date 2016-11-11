@@ -6185,6 +6185,35 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Self Picture")
   @Description("")
   String SelfPictureMethods();
+  
+  // =========== SVM
+  @DefaultMessage("Create Model")
+  @Description("")
+  String CreateModelMethods();
+
+  @DefaultMessage("Teach")
+  @Description("")
+  String TeachMethods();
+
+  @DefaultMessage("Predict")
+  @Description("")
+  String PredictMethods();
+
+  @DefaultMessage("SaveModel")
+  @Description("")
+  String SaveModelMethods();
+
+  @DefaultMessage("LoadModel")
+  @Description("")
+  String LoadModelMethods();
+
+  @DefaultMessage("Kernel")
+  @Description("")
+  String KernelProperties();
+
+  @DefaultMessage("Type")
+  @Description("")
+  String TypeProperties();
 
   // Missing translations from 4/8/2015 -- Should sort into appropriate place
 

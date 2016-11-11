@@ -141,6 +141,20 @@ public class PropertyTypeConstants {
    * com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooColorSensorsChoicePropertyEditor#sensors
    */
   public static final String PROPERTY_TYPE_UDOO_COLOR_SENSORS = "udoo_color_sensors";
+  
+  /**
+   * SVM type
+   * @see
+   * com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSvmTypeChoicePropertyEditor#types
+   */
+  public static final String PROPERTY_TYPE_SVM_TYPES = "svm_types";
+  
+  /**
+   * SVM kernel type
+   * @see
+   * com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidSvmKernelTypeChoicePropertyEditor#types
+   */
+  public static final String PROPERTY_TYPE_SVM_KERNEL_TYPES = "svm_kernel_types";
 
   /**
    * Lego EV3 sensor ports.

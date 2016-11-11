@@ -60,6 +60,7 @@ import java.util.Map;
     EXPERIMENTAL("Experimental"),
     EXTENSION("Extension"),
     UDOO("UDOO"),
+    MACHINELEARNING("Machine Learning"),
     INTERNAL("For internal use only"),
     // UNINITIALIZED is used as a default value so Swing libraries can still compile
     UNINITIALIZED("Uninitialized");

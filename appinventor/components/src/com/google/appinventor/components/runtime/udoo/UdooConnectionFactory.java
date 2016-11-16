@@ -4,6 +4,7 @@
 
 package com.google.appinventor.components.runtime.udoo;
 
+import android.os.Build;
 import android.util.Log;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.Form;
@@ -21,10 +22,17 @@ public class UdooConnectionFactory
   private static final String TAG = "UdooConnectionFactory";
   private static HashMap<String, UdooTcpRedirector> connections = new HashMap<String, UdooTcpRedirector>();
   private static UdooAdkBroadcastReceiver adkInstance = null;
+  private static UdooMCCSerialReceiver serialInstance = null;
   
   public static UdooConnectionInterface getConnection(UdooConnectionDetailsInterface component, Form form)
   {
     if (component.isLocal()) {
+      if (Build.MODEL.equals("UDOONEO-MX6SX")) {
+        if (serialInstance == null) {
+          serialInstance = new UdooMCCSerialReceiver();
+        }
+        return serialInstance;
+      }
       if (adkInstance == null) {
         if (SdkLevel.getLevel() < SdkLevel.LEVEL_HONEYCOMB) {
           form.dispatchErrorOccurredEvent((Component)component, "getTransport", ErrorMessages.ERROR_UDOO_ADK_UNAVAILABLE);

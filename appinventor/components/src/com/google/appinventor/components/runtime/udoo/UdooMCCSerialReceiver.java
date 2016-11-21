@@ -4,21 +4,11 @@
 
 package com.google.appinventor.components.runtime.udoo;
 
-import java.io.FileDescriptor;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.usb.UsbAccessory;
-import android.hardware.usb.UsbManager;
-import android.os.ParcelFileDescriptor;
-import android.util.Log;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.util.ErrorMessages;
@@ -105,8 +95,10 @@ public class UdooMCCSerialReceiver implements UdooConnectionInterface
     this.isConnecting = false;
     notifyAll();
     
-    mSerialPort.close();
-    mSerialPort = null;
+    if (mSerialPort != null) {
+        mSerialPort.close();
+        mSerialPort = null;
+    }
   }
   
   @Override

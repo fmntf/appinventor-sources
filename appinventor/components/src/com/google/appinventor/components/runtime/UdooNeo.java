@@ -4,10 +4,6 @@
 
 package com.google.appinventor.components.runtime;
 
-import com.google.appinventor.components.runtime.udoo.UdooConnectionFactory;
-import com.google.appinventor.components.runtime.udoo.UdooConnectionInterface;
-import com.google.appinventor.components.runtime.udoo.UdooConnectedInterface;
-import android.util.Log;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.SimpleEvent;
@@ -18,28 +14,30 @@ import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.components.runtime.udoo.UdooBackgroundEventFirer;
+import com.google.appinventor.components.runtime.udoo.UdooBoard;
+import com.google.appinventor.components.runtime.udoo.UdooConnectedInterface;
 import com.google.appinventor.components.runtime.udoo.UdooConnectionDetailsInterface;
+import com.google.appinventor.components.runtime.udoo.UdooConnectionFactory;
+import com.google.appinventor.components.runtime.udoo.UdooConnectionInterface;
 import com.google.appinventor.components.runtime.udoo.UdooInterruptibleInterface;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
- * A component that allows to call functions on the Arduino side of UDOO boards.
+ * A component that allows to call functions on the Arduino side of UDOO Neo.
  *
  * @author francesco.monte@gmail.com
  */
-@DesignerComponent(version = YaVersion.UDOO_ARDUINO_COMPONENT_VERSION,
-    description = "A component that interfaces with the Arduino CPU in UDOO boards.",
+@DesignerComponent(version = YaVersion.UDOO_ARDUINO_NEO_COMPONENT_VERSION,
+    description = "A component that interfaces with the Arduino MPU in UDOO Neo.",
     category = ComponentCategory.UDOO,
     nonVisible = true,
     iconName = "images/udoo.png")
 @SimpleObject
-public class UdooArduino extends AndroidNonvisibleComponent
-implements OnResumeListener, OnDestroyListener, OnPauseListener,
-           UdooConnectedInterface, UdooConnectionDetailsInterface, UdooInterruptibleInterface
+public class UdooNeo extends UdooBoard
+  implements UdooConnectedInterface, UdooConnectionDetailsInterface, UdooInterruptibleInterface
 {
-  private final String TAG = "UdooArduino";
-  private UdooConnectionInterface connection = null;
+  public UdooNeo(Form form) {
+    super(form);
+  }
   
   private String transport = "local";
 
@@ -122,59 +120,6 @@ implements OnResumeListener, OnDestroyListener, OnPauseListener,
   public String getRemoteSecret() {
     return this.remoteSecret;
   }
-
-  public synchronized boolean isConnected()
-  {
-    boolean isc = getTransport().isConnected();
-    if (!isc) {
-      if (!getTransport().isConnecting()) {
-        getTransport().reconnect();
-      }
-    }
-    return isc;
-  }
-
-  public UdooArduino(final Form form)
-  {
-    super(form);
-    
-    form.registerForOnResume(this);
-    form.registerForOnDestroy(this);
-    form.registerForOnPause(this);
-    
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        new Timer().schedule(new TimerTask() {          
-          @Override
-          public void run() {
-            getTransport().onCreate(form);
-          }
-        }, 500);
-      }
-    }).start();
-  }
-  
-  @Override
-  public void onResume()
-  {
-    this.isConnected(); //connects, if disconnected
-  }
-
-  @Override
-  public void onDestroy()
-  {
-    getTransport().disconnect();
-    getTransport().onDestroy();
-  }
-  
-  @Override
-  public void onPause()
-  {
-    if (!getTransport().isConnecting()) {
-      getTransport().disconnect();
-    }
-  }
   
   @SimpleFunction
   public void pinMode(String pin, String mode)
@@ -243,12 +188,12 @@ implements OnResumeListener, OnDestroyListener, OnPauseListener,
   {
     if (this.isConnected()) {
       getTransport().arduino().setInterruptible(this);
-      Log.d(TAG, "Attaching interrupt");
       getTransport().arduino().attachInterrupt(pin, mode);
     }
   }
   
   @SimpleEvent(description = "Fires when the Arduino triggers an interrupt routine.")
+  @Override
   public void InterruptFired(int pinNumber)
   {
     UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
@@ -265,7 +210,8 @@ implements OnResumeListener, OnDestroyListener, OnPauseListener,
     ef.execute(this);
   }
   
-  protected UdooConnectionInterface getTransport()
+  @Override
+  public UdooConnectionInterface getTransport()
   {
     if (this.connection == null) {
       this.connection = UdooConnectionFactory.getConnection(this, form);

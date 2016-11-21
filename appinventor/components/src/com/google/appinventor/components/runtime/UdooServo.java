@@ -17,6 +17,7 @@ import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.components.runtime.udoo.UdooBackgroundEventFirer;
+import com.google.appinventor.components.runtime.udoo.UdooBoard;
 import com.google.appinventor.components.runtime.util.ErrorMessages;
 
 /**
@@ -80,8 +81,8 @@ implements UdooConnectedInterface
   @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_UDOO_ARDUINO_CONNECTION,
     defaultValue = "")
   @SimpleProperty(userVisible = false)
-  public void UdooArduino(UdooArduino udooArduino) {
-    this.connection = udooArduino.getTransport();
+  public void Board(UdooBoard board) {
+    this.connection = board.getTransport();
     this.connection.registerComponent(this, form);
   }
   

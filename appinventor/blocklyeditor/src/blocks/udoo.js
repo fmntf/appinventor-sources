@@ -9,7 +9,23 @@
 'use strict';
 
 
-Blockly.Blocks['udoo_digital_pinout'] = {
+Blockly.Blocks['udoo_uno_digital_pinout'] = {
+    init: function () {
+        var pinList = [];
+        for (var i=0; i<=13; i++) {
+            pinList.push([''+i, ''+i]);
+        }
+        
+        var dropdown = new Blockly.FieldDropdown(pinList);
+      
+        this.setColour(Blockly.MATH_CATEGORY_HUE);
+        this.setOutput(true, Blockly.Blocks.Utilities.YailTypeToBlocklyType("text", Blockly.Blocks.Utilities.OUTPUT));
+        this.appendDummyInput().appendField(dropdown, 'UDOO_UNO_DIGITAL_PINOUT');
+        var thisBlock = this;
+    }
+};
+
+Blockly.Blocks['udoo_due_digital_pinout'] = {
     init: function () {
         var start = 0,
             incrementStep = 10,
@@ -43,7 +59,7 @@ Blockly.Blocks['udoo_digital_pinout'] = {
       
         this.setColour(Blockly.MATH_CATEGORY_HUE);
         this.setOutput(true, Blockly.Blocks.Utilities.YailTypeToBlocklyType("text", Blockly.Blocks.Utilities.OUTPUT));
-        this.appendDummyInput().appendField(dropdown, 'UDOO_DIGITAL_PINOUT');
+        this.appendDummyInput().appendField(dropdown, 'UDOO_DUE_DIGITAL_PINOUT');
         var thisBlock = this;
     }
 };

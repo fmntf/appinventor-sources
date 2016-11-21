@@ -6420,9 +6420,9 @@ public interface OdeMessages extends Messages {
   @Description("")
   String DirectionProperties();
   
-  @DefaultMessage("UdooArduino")
+  @DefaultMessage("Board")
   @Description("")
-  String UdooArduinoProperties();
+  String BoardProperties();
 
   @DefaultMessage("SelectionColor")
   @Description("")

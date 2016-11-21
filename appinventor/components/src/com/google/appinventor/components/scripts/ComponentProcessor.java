@@ -1520,6 +1520,10 @@ public abstract class ComponentProcessor extends AbstractProcessor {
       return "component";
     }
 
+    if (type.equals("com.google.appinventor.components.runtime.udoo.UdooBoard")) {
+      return "component";
+    }
+
     throw new RuntimeException("Cannot convert Java type '" + type +
                                "' to Yail type");
   }

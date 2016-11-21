@@ -23,8 +23,13 @@ Blockly.Yail['udoo_analog_pinout'] = function() {
   return [code, Blockly.Yail.ORDER_ATOMIC];
 };
 
-Blockly.Yail['udoo_digital_pinout'] = function() {
-  var code = Blockly.Yail.quote_(this.getFieldValue('UDOO_DIGITAL_PINOUT'));
+Blockly.Yail['udoo_uno_digital_pinout'] = function() {
+  var code = Blockly.Yail.quote_(this.getFieldValue('UDOO_UNO_DIGITAL_PINOUT'));
+  return [code, Blockly.Yail.ORDER_ATOMIC];
+};
+
+Blockly.Yail['udoo_due_digital_pinout'] = function() {
+  var code = Blockly.Yail.quote_(this.getFieldValue('UDOO_DUE_DIGITAL_PINOUT'));
   return [code, Blockly.Yail.ORDER_ATOMIC];
 };
 

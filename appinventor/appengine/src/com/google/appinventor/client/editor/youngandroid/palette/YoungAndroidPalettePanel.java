@@ -71,8 +71,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Panel showing Simple components which can be dropped onto the Young Android
@@ -257,8 +259,10 @@ public class YoungAndroidPalettePanel extends Composite implements SimplePalette
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TRANSPORTS)) {
       return new YoungAndroidUdooTransportsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_ARDUINO_CONNECTION)) {
-      return new YoungAndroidComponentSelectorPropertyEditor(editor,
-          Collections.singleton("UdooArduino"));
+      Set<String> arduinos = new HashSet<String>();
+      arduinos.add("UdooQuadDual");
+      arduinos.add("UdooNeo");
+      return new YoungAndroidComponentSelectorPropertyEditor(editor, arduinos);
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TEMP_HUM_SENSORS)) {
       return new YoungAndroidUdooTempHumSensorsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_COLOR_SENSORS)) {

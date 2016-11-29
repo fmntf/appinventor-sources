@@ -5,7 +5,6 @@
 package com.google.appinventor.components.runtime;
 
 import com.google.appinventor.components.runtime.udoo.UdooConnectionInterface;
-import com.google.appinventor.components.runtime.udoo.UdooConnectedInterface;
 import android.util.Log;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
@@ -16,7 +15,6 @@ import com.google.appinventor.components.annotations.SimpleProperty;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
-import com.google.appinventor.components.runtime.udoo.UdooBackgroundEventFirer;
 import com.google.appinventor.components.runtime.udoo.UdooBoard;
 import org.json.JSONObject;
 
@@ -32,7 +30,6 @@ import org.json.JSONObject;
     iconName = "images/udooTemperature.png")
 @SimpleObject
 public class UdooTempHumSensor extends AndroidNonvisibleComponent
-implements UdooConnectedInterface
 {
   private UdooConnectionInterface connection = null;
   private final String TAG = "UdooTempHumSensor";
@@ -48,7 +45,6 @@ implements UdooConnectedInterface
   @SimpleProperty(userVisible = false)
   public void Board(UdooBoard board) {
     this.connection = board.getTransport();
-    this.connection.registerComponent(this, form);
   }
   
   private String sensor = SENSOR_TYPE_DHT11;
@@ -77,14 +73,6 @@ implements UdooConnectedInterface
         Log.d(TAG, "Invalid JSON");
       }
     }
-  }
-  
-  @SimpleEvent(description = "Fires when the Arduino is (re)connected.")
-  public void Connected()
-  {
-    UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
-    ef.setEventName("Connected");
-    ef.execute(this);
   }
   
   @SimpleEvent(description = "Fires when the Arduino returns the temperature and humidity.")

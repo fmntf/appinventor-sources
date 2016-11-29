@@ -4,7 +4,9 @@
 
 package com.google.appinventor.components.runtime.udoo;
 
+import android.os.Build;
 import android.util.Log;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -78,14 +80,32 @@ public class UdooArduinoReader
         int mByteRead = -1;
 
         try {
-          message = "";
-          do {
-            if (inputStream.available() > 0) {
+          if (Build.MODEL.equals("UDOONEO-MX6SX")) {
+            message = "";
+            do {
+              if (inputStream.available() > 0) {
+                mByteRead = inputStream.read(buffer, 0, buffer.length);
+                message += new String(Arrays.copyOfRange(buffer, 0, mByteRead));
+              }
+            } while (!message.contains("\n"));
+            message = message.trim();
+          } else {
+            byte[] response;
+            if (inputStream instanceof FileInputStream) {
               mByteRead = inputStream.read(buffer, 0, buffer.length);
-              message += new String(Arrays.copyOfRange(buffer, 0, mByteRead));
+              if (mByteRead != -1) {
+                response = Arrays.copyOfRange(buffer, 0, mByteRead);
+                message = new String(response).trim();
+              }
+            } else {
+              message = "";
+              do {
+                mByteRead = inputStream.read(buffer, 0, buffer.length);
+                message += new String(Arrays.copyOfRange(buffer, 0, mByteRead));
+              } while (!message.contains("\n"));
+              message = message.trim();
             }
-          } while (!message.contains("\n"));
-          message = message.trim();
+          }
         } catch (IOException e) {
           Log.e("ARDUINO IO Exception", e.getMessage());
           Logger.getLogger(UdooArduinoReader.class.getName()).log(Level.SEVERE, null, e);

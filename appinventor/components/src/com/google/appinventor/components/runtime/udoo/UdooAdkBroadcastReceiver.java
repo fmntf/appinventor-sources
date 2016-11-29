@@ -22,8 +22,6 @@ import android.util.Log;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.util.ErrorMessages;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ADK/USB for local App Iventor <-> UDOO connections.
@@ -43,7 +41,7 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
   private FileOutputStream outputStream;
   private UdooArduinoManager arduino;
   private boolean connected = false;
-  List<UdooConnectedInterface> connectedComponents = new ArrayList<UdooConnectedInterface>();
+  UdooConnectedInterface connectedComponent;
   Form form;
   private boolean isConnecting;
 
@@ -77,7 +75,7 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
         notifyAll();
         connect();
       } else {
-        form.dispatchErrorOccurredEvent((Component)connectedComponents.get(0), "onReceive", ErrorMessages.ERROR_UDOO_ADK_NO_PERMISSIONS);
+        form.dispatchErrorOccurredEvent((Component)connectedComponent, "onReceive", ErrorMessages.ERROR_UDOO_ADK_NO_PERMISSIONS);
       }
     }
   }
@@ -113,7 +111,7 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
     }
   }
 
-  public synchronized void connect()
+  public void connect()
   {
     if (this.connected) {
       return;
@@ -127,7 +125,7 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
     UsbAccessory accessory = null;
     if (accessories == null) {
       Log.v(TAG, "No accessories found!");
-      form.dispatchErrorOccurredEvent((Component)connectedComponents.get(0), "connect", ErrorMessages.ERROR_UDOO_ADK_NO_DEVICE);
+      form.dispatchErrorOccurredEvent((Component)connectedComponent, "connect", ErrorMessages.ERROR_UDOO_ADK_NO_DEVICE);
       return;
     }
     for (UsbAccessory iaccessory : accessories) {
@@ -137,7 +135,7 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
     }
 
     if (accessory == null) {
-      form.dispatchErrorOccurredEvent((Component)connectedComponents.get(0), "connect", ErrorMessages.ERROR_UDOO_ADK_NO_DEVICE);
+      form.dispatchErrorOccurredEvent((Component)connectedComponent, "connect", ErrorMessages.ERROR_UDOO_ADK_NO_DEVICE);
       return;
     }
     
@@ -167,22 +165,21 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
       if (!this.arduino.hi()) {
         this.connected = false;
         this.isConnecting = false;
-        form.dispatchErrorOccurredEvent((Component)connectedComponents.get(0), "connect", ErrorMessages.ERROR_UDOO_ADK_NO_CONNECTION);
+        form.dispatchErrorOccurredEvent((Component)connectedComponent, "connect", ErrorMessages.ERROR_UDOO_ADK_NO_CONNECTION);
         return;
       }
       
       this.connected = true;
       this.isConnecting = false;
-      for (UdooConnectedInterface c : connectedComponents) {
-        c.Connected();
-      }
-
+      
     } finally {
       if (pendingIntent != null) {
         pendingIntent.cancel();
         pendingIntent = null;
       }
     }
+    
+    connectedComponent.Connected();
   }
   
   @Override
@@ -218,7 +215,7 @@ public class UdooAdkBroadcastReceiver extends BroadcastReceiver implements UdooC
   @Override
   public void registerComponent(UdooConnectedInterface component, Form form)
   {
-    this.connectedComponents.add(component);
+    this.connectedComponent = component;
     this.form = form;
   }
 

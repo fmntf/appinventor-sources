@@ -9,7 +9,11 @@
 
 package com.google.appinventor.components.runtime;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -20,6 +24,8 @@ import java.util.Set;
 
 import org.json.JSONException;
 
+import org.udoo.bossacjni.FlashSketchTask;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -27,11 +33,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -1765,6 +1773,9 @@ public class Form extends Activity
     // Comment out the next line if we don't want the exit button
     addExitButtonToMenu(menu);
     addAboutInfoToMenu(menu);
+    if (Build.MODEL.equals("UDOO-MX6DQ")) {
+      addFlashUappiToMenu(menu);
+    }
     for (OnCreateOptionsMenuListener onCreateOptionsMenuListener : onCreateOptionsMenuListeners) {
       onCreateOptionsMenuListener.onCreateOptionsMenu(menu);
     }
@@ -1793,6 +1804,17 @@ public class Form extends Activity
       }
     });
     aboutAppItem.setIcon(android.R.drawable.sym_def_app_icon);
+  }
+
+  public void addFlashUappiToMenu(Menu menu) {
+    MenuItem aboutAppItem = menu.add(Menu.NONE, Menu.NONE, 2,
+    "Flash UAPPI Sketch")
+    .setOnMenuItemClickListener(new OnMenuItemClickListener() {
+      public boolean onMenuItemClick(MenuItem item) {
+        showFlashUappiNotification();
+        return true;
+      }
+    });
   }
 
   @Override
@@ -1825,6 +1847,78 @@ public class Form extends Activity
         stopApplication,
         doNothing,
         doNothing);
+  }
+
+  private void showFlashUappiNotification() {
+    String title = "FLash UAPPI sketch?";
+    String message = "Do you want to flash the sketch now?";
+    String positiveButton = "Flash";
+    String negativeButton = "Cancel";
+    // These runnables are passed to twoButtonAlert.  They perform the corresponding actions
+    // when the button is pressed.   Here there's nothing to do for "don't stop" and cancel
+    Runnable stopApplication = new Runnable() {public void run () {flashSketchNow();}};
+    Runnable doNothing = new Runnable () {public void run() {}};
+    Notifier.twoButtonDialog(
+        this,
+        message,
+        title,
+        positiveButton,
+        negativeButton,
+        false, // cancelable is false
+        stopApplication,
+        doNothing,
+        doNothing);
+  }
+
+  private void flashSketchNow() {
+    copySketchAssets();
+    File sketch = new File(getExternalFilesDir(null), "qdl.bin");
+    Log.w("TAG", sketch.getAbsolutePath());
+    
+    new FlashSketchTask(Form.this).execute(sketch.getAbsolutePath());
+  }
+
+  private void copySketchAssets() {
+    AssetManager assetManager = getAssets();
+    String[] files = null;
+    try {
+      files = assetManager.list("");
+    } catch (IOException e) {
+      Log.e("tag", "Failed to get asset file list.", e);
+    }
+    String filename = "qdl.bin";
+    InputStream in = null;
+    OutputStream out = null;
+    try {
+      in = assetManager.open(filename);
+      File outFile = new File(getExternalFilesDir(null), filename);
+      out = new FileOutputStream(outFile);
+      copyFile(in, out);
+    } catch(IOException e) {
+      Log.e("tag", "Failed to copy asset file: " + filename, e);
+    }
+    finally {
+      if (in != null) {
+        try {
+          in.close();
+        } catch (IOException e) {
+        }
+      }
+      if (out != null) {
+        try {
+          out.close();
+        } catch (IOException e) {
+        }
+      }
+    }
+  }
+
+  private void copyFile(InputStream in, OutputStream out) throws IOException {
+    byte[] buffer = new byte[1024];
+    int read;
+    while ((read = in.read(buffer)) != -1) {
+      out.write(buffer, 0, read);
+    }
   }
 
   private String yandexTranslateTagline = "";

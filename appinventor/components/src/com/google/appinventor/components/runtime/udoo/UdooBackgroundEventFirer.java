@@ -4,12 +4,11 @@
 
 package com.google.appinventor.components.runtime.udoo;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 
-public class UdooBackgroundEventFirer extends AsyncTask<Component, Void, Void>
+public class UdooBackgroundEventFirer implements Runnable
 {
   private final String TAG = "UdooBackgroundEventFirer";
   
@@ -27,17 +26,21 @@ public class UdooBackgroundEventFirer extends AsyncTask<Component, Void, Void>
     return this;
   }
   
+  Component component;
+  
+  public UdooBackgroundEventFirer setComponent(Component c) {
+    component = c;
+    return this;
+  }
+  
   @Override
-  protected Void doInBackground(Component... component) {
+  public void run() {
     Log.d(TAG, "Firing event " + eventName);
-    
     if (eventName.equals("InterruptFired")) {
-      EventDispatcher.dispatchEvent(component[0], eventName, pinNumber);
+      EventDispatcher.dispatchEvent(component, eventName, pinNumber);
     } else {
-      EventDispatcher.dispatchEvent(component[0], eventName);
+      EventDispatcher.dispatchEvent(component, eventName);
     }
-    
-    return null;
   }
 }
 

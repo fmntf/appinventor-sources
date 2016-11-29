@@ -5,7 +5,6 @@
 package com.google.appinventor.components.runtime;
 
 import com.google.appinventor.components.runtime.udoo.UdooConnectionInterface;
-import com.google.appinventor.components.runtime.udoo.UdooConnectedInterface;
 import android.util.Log;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
@@ -16,7 +15,6 @@ import com.google.appinventor.components.annotations.SimpleProperty;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
-import com.google.appinventor.components.runtime.udoo.UdooBackgroundEventFirer;
 import com.google.appinventor.components.runtime.udoo.UdooBoard;
 import org.json.JSONObject;
 
@@ -32,7 +30,6 @@ import org.json.JSONObject;
     iconName = "images/udooColor.png")
 @SimpleObject
 public class UdooColorSensor extends AndroidNonvisibleComponent
-implements UdooConnectedInterface
 {
   private UdooConnectionInterface connection = null;
   private final String TAG = "UdooColorSensor";
@@ -47,7 +44,6 @@ implements UdooConnectedInterface
   @SimpleProperty(userVisible = false)
   public void Board(UdooBoard board) {
     this.connection = board.getTransport();
-    this.connection.registerComponent(this, form);
   }
   
   private String sensor = SENSOR_TYPE_TCS34725;
@@ -82,14 +78,6 @@ implements UdooConnectedInterface
   public void DataReady(int red, int green, int blue)
   {
     EventDispatcher.dispatchEvent(this, "DataReady", red, green, blue);
-  }
-  
-  @SimpleEvent(description = "Fires when the Arduino is (re)connected.")
-  public void Connected()
-  {
-    UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
-    ef.setEventName("Connected");
-    ef.execute(this);
   }
   
   public synchronized boolean isConnected()

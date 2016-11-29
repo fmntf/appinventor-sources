@@ -197,8 +197,8 @@ public class UdooQuadDual extends UdooBoard
   public void InterruptFired(int pinNumber)
   {
     UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
-    ef.setEventName("InterruptFired").setPinNumber(pinNumber);
-    ef.execute(this);
+    ef.setEventName("InterruptFired").setPinNumber(pinNumber).setComponent(this);
+    new Thread(ef).start();
   }
   
   @SimpleEvent(description = "Fires when the Arduino is (re)connected.")
@@ -206,8 +206,8 @@ public class UdooQuadDual extends UdooBoard
   public void Connected()
   {
     UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
-    ef.setEventName("Connected");
-    ef.execute(this);
+    ef.setEventName("Connected").setComponent(this);
+    new Thread(ef).start();
   }
   
   @Override

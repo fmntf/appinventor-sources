@@ -5,18 +5,15 @@
 package com.google.appinventor.components.runtime;
 
 import com.google.appinventor.components.runtime.udoo.UdooConnectionInterface;
-import com.google.appinventor.components.runtime.udoo.UdooConnectedInterface;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.PropertyCategory;
-import com.google.appinventor.components.annotations.SimpleEvent;
 import com.google.appinventor.components.annotations.SimpleFunction;
 import com.google.appinventor.components.annotations.SimpleObject;
 import com.google.appinventor.components.annotations.SimpleProperty;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
-import com.google.appinventor.components.runtime.udoo.UdooBackgroundEventFirer;
 import com.google.appinventor.components.runtime.udoo.UdooBoard;
 import com.google.appinventor.components.runtime.util.ErrorMessages;
 
@@ -32,7 +29,6 @@ import com.google.appinventor.components.runtime.util.ErrorMessages;
     iconName = "images/udooGear.png")
 @SimpleObject
 public class UdooServo extends AndroidNonvisibleComponent
-implements UdooConnectedInterface
 {
   private UdooConnectionInterface connection = null;
   private final String TAG = "UdooServo";
@@ -83,15 +79,6 @@ implements UdooConnectedInterface
   @SimpleProperty(userVisible = false)
   public void Board(UdooBoard board) {
     this.connection = board.getTransport();
-    this.connection.registerComponent(this, form);
-  }
-  
-  @SimpleEvent(description = "Fires when the Arduino is (re)connected.")
-  public void Connected()
-  {
-    UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
-    ef.setEventName("Connected");
-    ef.execute(this);
   }
   
   public synchronized boolean isConnected()

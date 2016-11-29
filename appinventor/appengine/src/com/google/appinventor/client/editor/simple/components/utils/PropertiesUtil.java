@@ -25,6 +25,9 @@ import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroid
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidGeographicPointPropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidHorizontalAlignmentChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidIntegerRangePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidGpioDirectionsChoicePropertyEditor;
+import com.google.appinventor.client.editor.
+       youngandroid.properties.YoungAndroidHorizontalAlignmentChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidLegoEv3ColorSensorModeChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidLegoEv3GyroSensorModeChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidLegoEv3SensorPortChoicePropertyEditor;
@@ -40,6 +43,11 @@ import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroid
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidThemeChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidToastLengthChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidVerticalAlignmentChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooColorSensorsChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTempHumSensorsChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTransportsChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.
+       YoungAndroidVerticalAlignmentChoicePropertyEditor;
 import com.google.appinventor.client.properties.BadPropertyEditorException;
 import com.google.appinventor.client.properties.Property;
 import com.google.appinventor.client.widgets.properties.ChoicePropertyEditor;
@@ -60,7 +68,9 @@ import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.shared.simple.ComponentDatabaseInterface;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Provides utility functions for dealing with the UI for component properties.
@@ -224,6 +234,19 @@ public class PropertiesUtil {
       return new YoungAndroidIntegerRangePropertyEditor(1, 18);
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_FLOAT)) {
       return new NonNegativeFloatPropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_GPIO_DIRECTIONS)) {
+      return new YoungAndroidGpioDirectionsChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TRANSPORTS)) {
+      return new YoungAndroidUdooTransportsChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_ARDUINO_CONNECTION)) {
+      Set<String> arduinos = new HashSet<String>();
+      arduinos.add("UdooQuadDual");
+      arduinos.add("UdooNeo");
+      return new YoungAndroidComponentSelectorPropertyEditor(editor, arduinos);
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TEMP_HUM_SENSORS)) {
+      return new YoungAndroidUdooTempHumSensorsChoicePropertyEditor();
+    } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_COLOR_SENSORS)) {
+      return new YoungAndroidUdooColorSensorsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_INTEGER)) {
       return new NonNegativeIntegerPropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SCREEN_ORIENTATION)) {

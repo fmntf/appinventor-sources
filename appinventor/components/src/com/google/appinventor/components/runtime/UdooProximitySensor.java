@@ -8,6 +8,7 @@ import com.google.appinventor.components.runtime.udoo.UdooConnectionInterface;
 import android.util.Log;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
+import com.google.appinventor.components.annotations.PropertyCategory;
 import com.google.appinventor.components.annotations.SimpleEvent;
 import com.google.appinventor.components.annotations.SimpleFunction;
 import com.google.appinventor.components.annotations.SimpleObject;
@@ -23,20 +24,21 @@ import org.json.JSONObject;
  *
  * @author francesco.monte@gmail.com
  */
-@DesignerComponent(version = YaVersion.UDOO_TEMPERATURE_HUMIDITY_SENSOR_COMPONENT_VERSION,
-    description = "A component that interfaces with temperature/humidity sensors connected to UDOO boards.",
+@DesignerComponent(version = YaVersion.UDOO_PROXIMITY_SENSOR_COMPONENT_VERSION,
+    description = "A component that interfaces with proximity sensors connected to UDOO boards.",
     category = ComponentCategory.UDOO,
     nonVisible = true,
-    iconName = "images/udooTemperature.png")
+    iconName = "images/udooProximity.png")
 @SimpleObject
-public class UdooTempHumSensor extends AndroidNonvisibleComponent
+public class UdooProximitySensor extends AndroidNonvisibleComponent
 {
   private UdooConnectionInterface connection = null;
   private final String TAG = "UdooTempHumSensor";
-  private final String SENSOR_TYPE_DHT11 = "DHT11";
-  private final String SENSOR_TYPE_DHT22 = "DHT22";
+  private final String SENSOR_TYPE_HCSR04 = "HC-SR04";
+  private String echoPin = null;
+  private String triggerPin = null;
 
-  public UdooTempHumSensor(Form form) {
+  public UdooProximitySensor(Form form) {
     super(form);
   }
 
@@ -47,14 +49,27 @@ public class UdooTempHumSensor extends AndroidNonvisibleComponent
     this.connection = board.getTransport();
   }
   
-  private String sensor = SENSOR_TYPE_DHT11;
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_STRING)
+  @SimpleProperty(category = PropertyCategory.BEHAVIOR, description = "Sets the pin where the echo pin is connected to.")
+  public void PinEcho(String pin) {
+    this.echoPin = pin;
+  }
+
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_STRING)
+  @SimpleProperty(category = PropertyCategory.BEHAVIOR, description = "Sets the pin where the trigger pin is connected to.")
+  public void PinTrigger(String pin) {
+    this.triggerPin = pin;
+  }
+
+  
+  private String sensor = SENSOR_TYPE_HCSR04;
 
  /**
   * @param sensor 
   */
   @DesignerProperty(
-      editorType = PropertyTypeConstants.PROPERTY_TYPE_UDOO_TEMP_HUM_SENSORS,
-      defaultValue = SENSOR_TYPE_DHT11)
+      editorType = PropertyTypeConstants.PROPERTY_TYPE_UDOO_PROXIMITY_SENSORS,
+      defaultValue = SENSOR_TYPE_HCSR04)
   @SimpleProperty(
       description = "Select the temperature/humidity sensor connected to your board.",
       userVisible = false)
@@ -63,22 +78,22 @@ public class UdooTempHumSensor extends AndroidNonvisibleComponent
   }
 
   @SimpleFunction
-  public void ReadSensor(String pin)
+  public void ReadSensor()
   {
     if (this.isConnected()) {
       try {
-        JSONObject response = getTransport().arduino().sensor(pin, this.sensor);
-        this.DataReady(response.getDouble("temperature"), response.getDouble("humidity"));
+        JSONObject response = getTransport().arduino().sensor(this.echoPin, this.triggerPin, this.sensor);
+        this.DataReady(response.getDouble("distance"));
       } catch (Exception ex) {
         Log.d(TAG, "Invalid JSON");
       }
     }
   }
   
-  @SimpleEvent(description = "Fires when the Arduino returns the temperature and humidity.")
-  public void DataReady(double temperature, double humidity)
+  @SimpleEvent(description = "Fires when the Arduino returns the distance.")
+  public void DataReady(double distance)
   {
-    EventDispatcher.dispatchEvent(this, "DataReady", temperature, humidity);
+    EventDispatcher.dispatchEvent(this, "DataReady", distance);
   }
   
   public synchronized boolean isConnected()

@@ -194,10 +194,10 @@ public class UdooNeo extends UdooBoard
   
   @SimpleEvent(description = "Fires when the Arduino triggers an interrupt routine.")
   @Override
-  public void InterruptFired(int pinNumber)
+  public void InterruptFired(int pinNumber, int timestamp)
   {
     UdooBackgroundEventFirer ef = new UdooBackgroundEventFirer();
-    ef.setEventName("InterruptFired").setPinNumber(pinNumber).setComponent(this);
+    ef.setEventName("InterruptFired").setArguments(pinNumber, timestamp).setComponent(this);
     new Thread(ef).start();
   }
   

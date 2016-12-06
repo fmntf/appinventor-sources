@@ -124,6 +124,13 @@ public class PropertyTypeConstants {
   public static final String PROPERTY_TYPE_UDOO_TEMP_HUM_SENSORS = "udoo_temp_hum_sensors";
   
   /**
+   * UDOO proximity sensors
+   * @see
+   * com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooProximitySensorsChoicePropertyEditor#sensors
+   */
+  public static final String PROPERTY_TYPE_UDOO_PROXIMITY_SENSORS = "udoo_proximity_sensors";
+  
+  /**
    * UDOO color sensors
    * @see
    * com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooColorSensorsChoicePropertyEditor#sensors

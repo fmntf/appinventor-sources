@@ -299,6 +299,33 @@ public class UdooArduinoManager
     throw new Exception("Invalid response from ADK");
   }
   
+  public JSONObject sensor(String pin1, String pin2, String sensorName) throws Exception
+  {
+    JSONObject json = new JSONObject();
+    try {
+      json.put("sensor", sensorName);
+      json.put("pin1", pinNameToInt(pin1));
+      json.put("pin2", pinNameToInt(pin2));
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    
+    JSONObject response = sendJson(json);
+    
+    try {
+      boolean success = ((Boolean) response.get("success")).booleanValue();
+      
+      if (success) {
+        return response;
+      }
+      
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    
+    throw new Exception("Invalid response from ADK");
+  }
+  
   public void servo(String pin, String method) {
     servo(pin, method, -1);
   }

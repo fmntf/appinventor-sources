@@ -38,12 +38,14 @@ class UdooRequestsRegistry
       }
       
       int pin = -1;
+      int ts = -1;
       try {
         pin = response.getInt("pin");
+        ts = response.getInt("timestamp");
       } catch (JSONException ex) {
       }
       
-      component.InterruptFired(pin);
+      component.InterruptFired(pin, ts);
       return;
     }
     

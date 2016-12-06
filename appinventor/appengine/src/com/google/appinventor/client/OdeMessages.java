@@ -6412,9 +6412,17 @@ public interface OdeMessages extends Messages {
   String FusionTablesStandardErrorMessage();
   
   // =========== UDOO
-  @DefaultMessage("PinNumber")
+  @DefaultMessage("Pin Number")
   @Description("")
   String PinNumberProperties();
+
+  @DefaultMessage("Pin Echo")
+  @Description("")
+  String PinEchoProperties();
+
+  @DefaultMessage("Pin Trigger")
+  @Description("")
+  String PinTriggerProperties();
 
   @DefaultMessage("Direction")
   @Description("")
@@ -6469,11 +6477,11 @@ public interface OdeMessages extends Messages {
   @Description("")
   String PredictMethods();
 
-  @DefaultMessage("SaveModel")
+  @DefaultMessage("Save Model")
   @Description("")
   String SaveModelMethods();
 
-  @DefaultMessage("LoadModel")
+  @DefaultMessage("Load Model")
   @Description("")
   String LoadModelMethods();
 

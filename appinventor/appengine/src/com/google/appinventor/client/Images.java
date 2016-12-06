@@ -610,4 +610,10 @@ public interface Images extends Resources {
 
   @Source("com/google/appinventor/images/udooGear.png")
   ImageResource udooGear();
+
+  @Source("com/google/appinventor/images/udooProximity.png")
+  ImageResource udooProximity();
+
+  @Source("com/google/appinventor/images/udooSvm.png")
+  ImageResource udooSvm();
 }

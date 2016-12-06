@@ -47,6 +47,7 @@ import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroid
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidVerticalAlignmentChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooColorSensorsChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTempHumSensorsChoicePropertyEditor;
+import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooProximitySensorsChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidUdooTransportsChoicePropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.
        YoungAndroidVerticalAlignmentChoicePropertyEditor;
@@ -247,6 +248,8 @@ public class PropertiesUtil {
       return new YoungAndroidComponentSelectorPropertyEditor(editor, arduinos);
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_TEMP_HUM_SENSORS)) {
       return new YoungAndroidUdooTempHumSensorsChoicePropertyEditor();
+  } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_PROXIMITY_SENSORS)) {
+      return new YoungAndroidUdooProximitySensorsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_UDOO_COLOR_SENSORS)) {
       return new YoungAndroidUdooColorSensorsChoicePropertyEditor();
     } else if (editorType.equals(PropertyTypeConstants.PROPERTY_TYPE_SVM_TYPES)) {

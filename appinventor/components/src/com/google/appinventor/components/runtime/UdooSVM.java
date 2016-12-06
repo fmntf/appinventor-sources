@@ -31,7 +31,7 @@ import libsvm.*;
     description = "A component that allows SVM, a machine learning technique.",
     category = ComponentCategory.MACHINELEARNING,
     nonVisible = true,
-    iconName = "images/udooGear.png")
+    iconName = "images/udooSvm.png")
 @SimpleObject
 @UsesLibraries(libraries = "libsvm.jar")
 public class UdooSVM extends AndroidNonvisibleComponent

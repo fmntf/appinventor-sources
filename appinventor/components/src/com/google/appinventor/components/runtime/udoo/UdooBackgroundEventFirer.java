@@ -13,9 +13,11 @@ public class UdooBackgroundEventFirer implements Runnable
   private final String TAG = "UdooBackgroundEventFirer";
   
   int pinNumber;
+  int timeStamp;
   
-  public UdooBackgroundEventFirer setPinNumber(int pin) {
+  public UdooBackgroundEventFirer setArguments(int pin, int ts) {
     pinNumber = pin;
+    timeStamp = ts;
     return this;
   }
   
@@ -37,7 +39,7 @@ public class UdooBackgroundEventFirer implements Runnable
   public void run() {
     Log.d(TAG, "Firing event " + eventName);
     if (eventName.equals("InterruptFired")) {
-      EventDispatcher.dispatchEvent(component, eventName, pinNumber);
+      EventDispatcher.dispatchEvent(component, eventName, pinNumber, timeStamp);
     } else {
       EventDispatcher.dispatchEvent(component, eventName);
     }

@@ -4,6 +4,7 @@
 
 package com.google.appinventor.components.runtime.udoo;
 
+import android.app.Activity;
 import com.google.appinventor.components.runtime.AndroidNonvisibleComponent;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.OnDestroyListener;
@@ -76,4 +77,9 @@ implements OnResumeListener, OnDestroyListener, OnPauseListener
   }
   
   public abstract UdooConnectionInterface getTransport();
+  
+  public Activity getActivity()
+  {
+      return this.form.$context();
+  }
 }

@@ -5,7 +5,6 @@
 package com.google.appinventor.components.runtime.udoo;
 
 import android.util.Log;
-import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 
 public class UdooBackgroundEventFirer implements Runnable
@@ -28,21 +27,26 @@ public class UdooBackgroundEventFirer implements Runnable
     return this;
   }
   
-  Component component;
+  UdooBoard component;
   
-  public UdooBackgroundEventFirer setComponent(Component c) {
+  public UdooBackgroundEventFirer setComponent(UdooBoard c) {
     component = c;
     return this;
   }
   
   @Override
   public void run() {
-    Log.d(TAG, "Firing event " + eventName);
-    if (eventName.equals("InterruptFired")) {
-      EventDispatcher.dispatchEvent(component, eventName, pinNumber, timeStamp);
-    } else {
-      EventDispatcher.dispatchEvent(component, eventName);
-    }
+    component.getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        Log.d(TAG, "Firing event " + eventName);
+        if (eventName.equals("InterruptFired")) {
+          EventDispatcher.dispatchEvent(component, eventName, pinNumber, timeStamp);
+        } else {
+          EventDispatcher.dispatchEvent(component, eventName);
+        }
+      }
+    });
   }
 }
 

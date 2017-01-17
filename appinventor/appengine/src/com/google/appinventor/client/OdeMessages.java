@@ -6606,6 +6606,18 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("ReadSensor")
   @Description("")
   String ReadSensorMethods();
+  
+  @DefaultMessage("LeftEye")
+  @Description("")
+  String LeftEyeProperties();
+
+  @DefaultMessage("RigthEye")
+  @Description("")
+  String RigthEyeProperties();
+
+  @DefaultMessage("Smile")
+  @Description("")
+  String SmileProperties();
 
   @DefaultMessage("ExtraKey and ExtraValue are deprecated and will not be supported. " +
       "Please use the new Extras property in Blocks.\n")

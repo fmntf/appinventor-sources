@@ -122,6 +122,10 @@
         <pathelement location="lib/QRGenerator/core.jar" />
         <pathelement location="lib/QRGenerator/javase.jar" />
         <pathelement location="lib/libsvm/libsvm.jar" />
+        <pathelement location="lib/playservices/play-services-base.jar" />
+        <pathelement location="lib/playservices/play-services-basement.jar" />
+        <pathelement location="lib/playservices/play-services-tasks.jar" />
+        <pathelement location="lib/playservices/play-services-vision.jar" />
         <fileset dir="buildserver/lib" includes="**/*.jar"/>
         <!-- Apache Http Libraries -->
         <pathelement location="lib/apache-http/httpcore-4.3.2.jar" />

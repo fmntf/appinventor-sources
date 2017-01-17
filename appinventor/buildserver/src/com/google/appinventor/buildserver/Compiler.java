@@ -779,6 +779,8 @@ public final class Compiler {
       
       if (isUdoo) {
         out.write("<uses-library android:name=\"com.android.future.usb.accessory\" />");
+        out.write("<meta-data android:name=\"com.google.android.gms.version\" android:value=\"9452000\" />");
+        out.write("  <meta-data android:name=\"com.google.android.gms.vision.DEPENDENCIES\" android:value=\"face\" />");
       }
 
       for (Project.SourceDescriptor source : project.getSources()) {

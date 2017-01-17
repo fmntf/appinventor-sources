@@ -144,6 +144,7 @@ public final class SimpleComponentDescriptor {
     bundledImages.put("images/udooGear.png", images.udooGear());
     bundledImages.put("images/udooProximity.png", images.udooProximity());
     bundledImages.put("images/udooSvm.png", images.udooSvm());
+    bundledImages.put("images/udooEye.png", images.udooEye());
     imagesInitialized = true;
   }
 

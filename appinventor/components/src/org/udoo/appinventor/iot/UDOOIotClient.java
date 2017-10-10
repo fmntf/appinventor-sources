@@ -21,11 +21,16 @@ import org.udoo.appinventor.iot.udooiotrestjava.node.ArduinoNode;
 import org.udoo.appinventor.iot.udooiotrestjava.node.NeoNode;
 
 
-@DesignerComponent(description = "UDOO IoT Client",
-                   version = 1,
-                   category = ComponentCategory.EXTENSION,
-                   nonVisible = true,
-                   iconName = "https://www.udoo.org/appinventor/udoo.png")
+@DesignerComponent(description = "This component allows you to connect to the <a href=\"http://ai2.udoo.org/\">UDOO IoT service</a>.<br>" +
+    "Allowed methods are:<br>" + 
+    " - DigitalWrite(13, \"HIGH\") <br>" + 
+    " - DigitalRead(13) (returns \"LOW\"/\"HIGH\") <br>" + 
+    " - AnalogRead(0) (returns 0-1023) <br>" + 
+    "<br>It is not necessary to configure pin directions (pinMode).",
+    version = 1,
+    category = ComponentCategory.EXTENSION,
+    nonVisible = true,
+    iconName = "https://www.udoo.org/appinventor/udoo.png")
 @SimpleObject(external = true)
 public class UDOOIotClient extends AndroidNonvisibleComponent implements Component
 {
@@ -87,16 +92,13 @@ public class UDOOIotClient extends AndroidNonvisibleComponent implements Compone
   @SimpleEvent(description = "Login did not succeed.")
   public void LoginFailed(final String reason) {
     Log.d(TAG, "LoginFailed");
-    Log.d(TAG, reason);
-    final UDOOIotClient dff = this;
+    final UDOOIotClient client = this;
     new Handler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        EventDispatcher.dispatchEvent(dff, "LoginFailed", reason);
+        EventDispatcher.dispatchEvent(client, "LoginFailed", reason);
       }
-    }, 1000);
-    
-    
+    }, 500);
   }
 
   @SimpleFunction
@@ -147,9 +149,7 @@ public class UDOOIotClient extends AndroidNonvisibleComponent implements Compone
       signalError("AnalogRead", 66603, "Board not found!");
       return -1;
     } else {
-      String result = arduino.analogRead(pin);
-      Log.d(TAG, result);
-      return Integer.parseInt(result);
+      return arduino.analogRead(pin);
     }
   }
   

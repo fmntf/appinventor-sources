@@ -156,6 +156,8 @@ public class UDOOIoTRestService {
                     }
                     if (conn != null) {
                         conn.setRequestMethod("GET");
+                        conn.setConnectTimeout(10000);
+                        conn.setReadTimeout(10000);
 
                         if (token != null && token.length() > 0) {
                             conn.setRequestProperty("Authorization", "JWT " + token);

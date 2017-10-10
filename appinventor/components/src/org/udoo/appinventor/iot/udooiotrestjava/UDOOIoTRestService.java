@@ -2,10 +2,7 @@ package org.udoo.appinventor.iot.udooiotrestjava;
 
 import android.util.Log;
 
-import org.udoo.appinventor.iot.udooiotrestjava.model.DataModel;
-import org.udoo.appinventor.iot.udooiotrestjava.model.IoTApiResponseModel;
-import org.udoo.appinventor.iot.udooiotrestjava.model.LoginResponseModel;
-import org.udoo.appinventor.iot.udooiotrestjava.model.NetworkModel;
+import org.udoo.appinventor.iot.udooiotrestjava.model.*;
 import org.udoo.appinventor.iot.udooiotrestjava.util.ParameterStringBuilder;
 
 import java.io.BufferedReader;
@@ -60,7 +57,7 @@ public class UDOOIoTRestService {
     }
 
 
-    static NetworkModel GetNetwork(final String token) {
+    static NetworkModel GetNetwork(final String token) throws UDOOIoTException{
         Future<DataModel<String>> ioTApiResponseModel = ApiCall(token, NETWORK);
         NetworkModel networkModel = null;
         try {
@@ -71,11 +68,11 @@ public class UDOOIoTRestService {
     }
 
 
-    static IoTApiResponseModel ApiRead(String token, String gatewayId, String nodeId, String sensorId, String pin) {
+    static IoTApiResponseModel ApiRead(String token, String gatewayId, String nodeId, String sensorId, String pin) throws UDOOIoTException{
         return ApiCall(true, token, READ_PATH, gatewayId, nodeId, sensorId, pin, null);
     }
 
-    static IoTApiResponseModel ApiWrite(String token, String gatewayId, String nodeId, String sensorId, String pin, String value) {
+    static IoTApiResponseModel ApiWrite(String token, String gatewayId, String nodeId, String sensorId, String pin, String value) throws UDOOIoTException{
         return ApiCall(false, token, WRITE_PATH, gatewayId, nodeId, sensorId, pin, value);
     }
 
@@ -123,7 +120,7 @@ public class UDOOIoTRestService {
         }
     }
 
-    private static IoTApiResponseModel ApiCall(boolean sync, final String token, final String operation, final String gatewaId, final String nodeId, final String sensorId, final String pin, final String value) {
+    private static IoTApiResponseModel ApiCall(boolean sync, final String token, final String operation, final String gatewaId, final String nodeId, final String sensorId, final String pin, final String value) throws UDOOIoTException{
         Future<DataModel<String>> result = ApiCall(token, API + SENSOR_PATH + operation + '/' + gatewaId + '/' + nodeId + '/' + sensorId + '/' + pin + (value != null ? '/' + value : ""));
         if (sync){
             IoTApiResponseModel ioTApiResponseModel = new IoTApiResponseModel();
@@ -138,7 +135,7 @@ public class UDOOIoTRestService {
         return null;
     }
 
-    private static Future<DataModel<String>> ApiCall(final String token, final String path) {
+    private static Future<DataModel<String>> ApiCall(final String token, final String path) throws UDOOIoTException{
         if (executors == null) executors = Executors.newSingleThreadExecutor();
         return executors.submit(new Callable<DataModel<String>>() {
             public DataModel<String> call() throws Exception {
@@ -170,7 +167,10 @@ public class UDOOIoTRestService {
                             buffer.append(chars, 0, read);
 
                         Log.i("RESP: ", buffer.toString());
-                        if (buffer.length() > 0) result.data = buffer.toString();
+                        if (buffer.length() > 0){
+                            result.data = buffer.toString();
+                        }
+
                     }
                 } catch (IOException e) {
                     result.error = e;
@@ -183,6 +183,14 @@ public class UDOOIoTRestService {
                     }
 
                 }
+
+                if (result.error != null) {
+                    ErrorModel errorModel = ErrorModel.Builder(result.data);
+                    if (errorModel != null) {
+                        throw new UDOOIoTException(errorModel.err);
+                    }
+                }
+
                 return result;
             }
         });

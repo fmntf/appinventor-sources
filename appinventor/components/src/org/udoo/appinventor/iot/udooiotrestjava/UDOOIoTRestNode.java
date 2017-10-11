@@ -16,14 +16,14 @@ public abstract class UDOOIoTRestNode {
         this.nodeId = nodeId;
     }
 
-    protected String read(String sensorId, String pin){
+    protected String read(String sensorId, String pin) throws UDOOIoTException{
         if(mUDOOIoTRestManager != null) {
             IoTApiResponseModel ioTApiResponseModel = mUDOOIoTRestManager.read(gatewayId, nodeId, sensorId, pin);
             if(ioTApiResponseModel!= null) return ioTApiResponseModel.value;
         }
         return "";
     }
-    protected void write(String sensorId, String pin, String value){
+    protected void write(String sensorId, String pin, String value) throws UDOOIoTException{
         if(mUDOOIoTRestManager != null) mUDOOIoTRestManager.write(gatewayId, nodeId, sensorId, pin, value);
     }
 }

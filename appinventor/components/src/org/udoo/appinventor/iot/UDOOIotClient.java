@@ -74,7 +74,7 @@ public class UDOOIotClient extends AndroidNonvisibleComponent implements Compone
   public void Login() {
     if (this.username == null || this.username.trim().equals("") ||
         this.password == null || this.password.trim().equals("")) {
-      LoginFailed("Please configure your IoT account.");
+      ConnectionError("Please configure your IoT account.");
     } else {
       udooIoTRestManager.login(username, password, new OnResult<Boolean>() {
         public void onSuccess(Boolean success) {
@@ -83,56 +83,65 @@ public class UDOOIotClient extends AndroidNonvisibleComponent implements Compone
 
         public void onError(Throwable error) {
           connected = false;
-          LoginFailed(error.getMessage());
+          ConnectionError(error.getMessage());
         }
       });
     }
   }
   
   @SimpleEvent(description = "Login did not succeed.")
-  public void LoginFailed(final String reason) {
-    Log.d(TAG, "LoginFailed");
+  public void ConnectionError(final String reason) {
+    Log.d(TAG, "ConnectionError");
     final UDOOIotClient client = this;
     new Handler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        EventDispatcher.dispatchEvent(client, "LoginFailed", reason);
+        EventDispatcher.dispatchEvent(client, "ConnectionError", reason);
       }
-    }, 500);
+    }, 100);
   }
-
+  
   @SimpleFunction
   public void DigitalWrite(int pin, String value) {
     if (!this.connected) {
-      signalError("DigitalWrite", 66602, "You are not logged in!");
+      ConnectionError("You are not logged in!");
       return;
     }
 
     ArduinoNode arduino = udooIoTRestManager.getArduino(boardName);
     if (arduino == null) {
-      signalError("DigitalWrite", 66603, "Board not found!");
+      ConnectionError("Board not found!");
     } else {
-      arduino.digitalWrite(pin, stringToLevel(value));
+      try {
+        arduino.digitalWrite(pin, stringToLevel(value));
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+      }
     }
   }
   
   @SimpleFunction
   public String DigitalRead(int pin) {
     if (!this.connected) {
-      signalError("DigitalRead", 66602, "You are not logged in!");
-      return "";
+      ConnectionError("You are not logged in!");
+      return "";    
     }
     
     ArduinoNode arduino = udooIoTRestManager.getArduino(boardName);
     if (arduino == null) {
-      signalError("DigitalRead", 66603, "Board not found!");
+      ConnectionError("Board not found!");
       return "";
     } else {
-      String result = arduino.digitalRead(pin);
-      if (result.equals("1")) {
-        return "HIGH";
-      } else {
-        return "LOW";
+      try {
+        String result = arduino.digitalRead(pin);
+        if (result.equals("1")) {
+          return "HIGH";
+        } else {
+          return "LOW";
+        }
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+        return "";
       }
     }
   }
@@ -140,80 +149,105 @@ public class UDOOIotClient extends AndroidNonvisibleComponent implements Compone
   @SimpleFunction
   public int AnalogRead(int pin) {
     if (!this.connected) {
-      signalError("AnalogRead", 66602, "You are not logged in!");
+      ConnectionError("You are not logged in!");
       return -1;
     }
     
     ArduinoNode arduino = udooIoTRestManager.getArduino(boardName);
     if (arduino == null) {
-      signalError("AnalogRead", 66603, "Board not found!");
+      ConnectionError("Board not found!");
       return -1;
     } else {
-      return arduino.analogRead(pin);
+      try {
+        return arduino.analogRead(pin);
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+        return -1;
+      }
     }
   }
   
   @SimpleFunction
   public float ReadTemperatureBrick() throws UDOOIoTException {
     if (!this.connected) {
-      signalError("DigitalRead", 66602, "You are not logged in!");
+      ConnectionError("You are not logged in!");
       return -1;
     }
     
     NeoNode neo = udooIoTRestManager.getNeo(boardName);
     if (neo == null) {
-      signalError("DigitalRead", 66603, "Board not found!");
+      ConnectionError("Board not found!");
       return -1;
     } else {
-      return neo.temperatureRead();
+      try {
+        return neo.temperatureRead();
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+        return -1;
+      }
     }
   }
   
   @SimpleFunction
-  public float ReadBarometerBrick() throws UDOOIoTException {
+  public float ReadBarometerBrick() {
     if (!this.connected) {
-      signalError("DigitalRead", 66602, "You are not logged in!");
+      ConnectionError("You are not logged in!");
       return -1;
     }
     
     NeoNode neo = udooIoTRestManager.getNeo(boardName);
     if (neo == null) {
-      signalError("DigitalRead", 66603, "Board not found!");
+      ConnectionError("Board not found!");
       return -1;
     } else {
-      return neo.barometerRead();
+      try {
+        return neo.barometerRead();
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+        return -1;
+      }
     }
   }
   
   @SimpleFunction
-  public float ReadLightBrick() throws UDOOIoTException {
+  public float ReadLightBrick() {
     if (!this.connected) {
-      signalError("DigitalRead", 66602, "You are not logged in!");
+      ConnectionError("You are not logged in!");
       return -1;
     }
     
     NeoNode neo = udooIoTRestManager.getNeo(boardName);
     if (neo == null) {
-      signalError("DigitalRead", 66603, "Board not found!");
+      ConnectionError("Board not found!");
       return -1;
     } else {
-      return neo.lightRead();
+      try {
+        return neo.lightRead();
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+        return -1;
+      }
     }
   }
   
   @SimpleFunction
-  public float ReadHumidityBrick() throws UDOOIoTException {
+  public float ReadHumidityBrick() {
     if (!this.connected) {
-      signalError("DigitalRead", 66602, "You are not logged in!");
+      ConnectionError("You are not logged in!");
       return -1;
     }
     
     NeoNode neo = udooIoTRestManager.getNeo(boardName);
     if (neo == null) {
-      signalError("DigitalRead", 66603, "Board not found!");
+      ConnectionError("Board not found!");
       return -1;
     } else {
-      return neo.humidityRead();
+      try {
+        return neo.humidityRead();
+      } catch (UDOOIoTException e) {
+        ConnectionError(e.getMessage());
+        return -1;
+      }
     }
   }
   
@@ -223,25 +257,5 @@ public class UDOOIotClient extends AndroidNonvisibleComponent implements Compone
       return 1;
     }
     return 0;
-  }
-  
-  /**
-   * Signal that an error has occurred. Since we are an extension, we don't have access to the normal
-   * error handling used by built-in App Inventor components. BluetoothLE errors are shown in a dialog
-   * rather than an alert for added clarity.
-   */
-  private void signalError(final String functionName, final int errorNumber, final String errorMessage) {
-    Log.e(TAG, errorMessage);
-  
-    form.runOnUiThread(new Runnable() {
-      public void run() {
-        form.ErrorOccurredDialog(UDOOIotClient.this,
-          functionName,
-          errorNumber,
-          errorMessage,
-          "UDOO IoT",
-          "Dismiss");
-      }
-    });
   }
 }

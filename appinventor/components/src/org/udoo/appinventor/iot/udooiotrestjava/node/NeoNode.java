@@ -7,7 +7,6 @@ import org.udoo.appinventor.iot.udooiotrestjava.model.SensorModel;
 import org.udoo.appinventor.iot.udooiotrestjava.util.Util;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +26,7 @@ public class NeoNode extends UDOOIoTRestNode {
         this.sensorModelList = sensorModelList;
     }
 
-    private String i2cRead(String addr){
+    private String i2cRead(String addr) throws UDOOIoTException{
         return read("i2c", addr);
     }
 

@@ -50,7 +50,7 @@ public class UDOOIoTRestManager {
         });
     }
 
-    public boolean refreshNetwork() {
+    public boolean refreshNetwork() throws UDOOIoTException {
         NetworkModel model = UDOOIoTRestService.GetNetwork(token);
         boolean success = false;
         if (model != null) {
@@ -60,11 +60,11 @@ public class UDOOIoTRestManager {
         return success;
     }
 
-    public IoTApiResponseModel read(String gatewayId, String nodeId, String sensorId, String pin) {
+    public IoTApiResponseModel read(String gatewayId, String nodeId, String sensorId, String pin) throws UDOOIoTException {
         return UDOOIoTRestService.ApiRead(token, gatewayId, nodeId, sensorId, pin);
     }
 
-    public void write(String gatewayId, String nodeId, String sensorId, String pin, String value) {
+    public void write(String gatewayId, String nodeId, String sensorId, String pin, String value) throws UDOOIoTException {
         UDOOIoTRestService.ApiWrite(token, gatewayId, nodeId, sensorId, pin, value);
     }
 

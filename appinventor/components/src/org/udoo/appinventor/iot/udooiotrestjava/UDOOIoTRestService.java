@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,7 +130,12 @@ public class UDOOIoTRestService {
                 if (stringDataModel != null && stringDataModel.data != null) {
                     ioTApiResponseModel = IoTApiResponseModel.Builder(stringDataModel.data);
                 }
-            } catch (Exception e) {}
+            }catch (Exception e) {
+                if (e.getMessage().contains("UDOOIoTException: ")) {
+                    String[] parts = e.getMessage().split("UDOOIoTException: ");
+                    throw new UDOOIoTException(parts[1]);
+                }
+            }
             return ioTApiResponseModel;
         }
         return null;
@@ -172,6 +178,8 @@ public class UDOOIoTRestService {
                         }
 
                     }
+                } catch (SocketTimeoutException e) {
+                    throw new UDOOIoTException("Connection timeout!");
                 } catch (IOException e) {
                     result.error = e;
                 } finally {
@@ -184,13 +192,13 @@ public class UDOOIoTRestService {
 
                 }
 
-                if (result.error != null) {
+                if (result.data != null) {
                     ErrorModel errorModel = ErrorModel.Builder(result.data);
                     if (errorModel != null) {
                         throw new UDOOIoTException(errorModel.err);
                     }
                 }
-
+                     
                 return result;
             }
         });

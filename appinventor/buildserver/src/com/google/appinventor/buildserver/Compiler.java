@@ -127,7 +127,7 @@ public final class Compiler {
   private static final String DEFAULT_ICON = RUNTIME_FILES_DIR + "ya.png";
   private static final String DEFAULT_VERSION_CODE = "1";
   private static final String DEFAULT_VERSION_NAME = "1.0";
-  private static final String DEFAULT_MIN_SDK = "7";
+  private static final String DEFAULT_MIN_SDK = "12";
   private static final String DEFAULT_THEME = "AppTheme.Light.DarkActionBar";
 
   /*
@@ -719,11 +719,6 @@ public final class Compiler {
         }
       }
 
-      // ADK requires SDK 12+
-      if (isUdoo) {
-        minSDK = "21";
-      }
-
       // make permissions unique by putting them in one set
       Set<String> permissions = Sets.newHashSet();
       for (Set<String> compPermissions : permissionsNeeded.values()) {
@@ -979,7 +974,7 @@ public final class Compiler {
     }                             // Static context
 
     if (isUdoo) {
-      File xmlDir = createDirectory(resDir, "xml");
+      File xmlDir = createDir(resDir, "xml");
       File file = new File(xmlDir, "usb_accessory_filter.xml");
       String usbRes = "<?xml version=\"1.0\" encoding=\"utf-8\"?><resources><usb-accessory manufacturer=\"UDOO\" model=\"AppInventor\" version=\"1.0\" /></resources>";
       try {

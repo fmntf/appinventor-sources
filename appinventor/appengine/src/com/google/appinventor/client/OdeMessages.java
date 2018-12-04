@@ -6464,6 +6464,138 @@ public interface OdeMessages extends Messages {
   @Description("")
   String SelfPictureMethods();
   
+  @DefaultMessage("UDOO")
+  @Description("")
+  String udooComponentPallette();
+
+  @DefaultMessage("UDOO Camera")
+  @Description("")
+  String udooCameraComponentPallette();
+
+  @DefaultMessage("UDOO Camera Help")
+  @Description("")
+  String UdooCameraHelpStringComponentPallette();
+
+  @DefaultMessage("UDOO Color Sensor")
+  @Description("")
+  String udooColorSensorComponentPallette();
+
+  @DefaultMessage("UDOO Color Sensor Help")
+  @Description("")
+  String UdooColorSensorHelpStringComponentPallette();
+
+  @DefaultMessage("red")
+  @Description("")
+  String redParams();
+
+  @DefaultMessage("green")
+  @Description("")
+  String greenParams();
+
+  @DefaultMessage("blue")
+  @Description("")
+  String blueParams();
+
+  @DefaultMessage("UDOO")
+  @Description("")
+  String udooNeoComponentPallette();
+
+  @DefaultMessage("UDOO Neo Help")
+  @Description("")
+  String UdooNeoHelpStringComponentPallette();
+
+  @DefaultMessage("pinNumber")
+  @Description("")
+  String pinNumberParams();
+
+  @DefaultMessage("pin")
+  @Description("")
+  String pinParams();
+
+  @DefaultMessage("fromLow")
+  @Description("")
+  String fromLowParams();
+
+  @DefaultMessage("fromHigh")
+  @Description("")
+  String fromHighParams();
+
+  @DefaultMessage("toLow")
+  @Description("")
+  String toLowParams();
+
+  @DefaultMessage("toHigh")
+  @Description("")
+  String toHighParams();
+
+  @DefaultMessage("UDOO Proximity Sensor")
+  @Description("")
+  String udooProximitySensorComponentPallette();
+
+  @DefaultMessage("UDOO Proximity Sensor Help")
+  @Description("")
+  String UdooProximitySensorHelpStringComponentPallette();
+
+  @DefaultMessage("UDOO Quad/Dual")
+  @Description("")
+  String udooQuadDualComponentPallette();
+
+  @DefaultMessage("UDOO Quad/Dual Help")
+  @Description("")
+  String UdooQuadDualHelpStringComponentPallette();
+
+  @DefaultMessage("UDOO SVM")
+  @Description("")
+  String udooSVMComponentPallette();
+
+  @DefaultMessage("UDOO SVM Help")
+  @Description("")
+  String UdooSVMHelpStringComponentPallette();
+
+  @DefaultMessage("category")
+  @Description("")
+  String categoryParams();
+
+  @DefaultMessage("UDOO Servo")
+  @Description("")
+  String udooServoComponentPallette();
+
+  @DefaultMessage("UDOO Servo Help")
+  @Description("")
+  String UdooServoHelpStringComponentPallette();
+
+  @DefaultMessage("degrees")
+  @Description("")
+  String degreesParams();
+
+  @DefaultMessage("UDOO Thermo Sensor")
+  @Description("")
+  String udooThermoSensorComponentPallette();
+
+  @DefaultMessage("UDOO Thermo Sensor Help")
+  @Description("")
+  String UdooThermoSensorHelpStringComponentPallette();
+
+  @DefaultMessage("temperature")
+  @Description("")
+  String temperatureParams();
+
+  @DefaultMessage("humidity")
+  @Description("")
+  String humidityParams();
+
+  @DefaultMessage("UDOO Vision")
+  @Description("")
+  String udooVisionComponentPallette();
+
+  @DefaultMessage("UDOO Vision Help")
+  @Description("")
+  String UdooVisionHelpStringComponentPallette();
+
+  @DefaultMessage("UDOO Machine Learning")
+  @Description("")
+  String machineLearningComponentPallette();
+
   // =========== SVM
   @DefaultMessage("Create Model")
   @Description("")
@@ -6488,10 +6620,6 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Kernel")
   @Description("")
   String KernelProperties();
-
-  @DefaultMessage("Type")
-  @Description("")
-  String TypeProperties();
 
   // Missing translations from 4/8/2015 -- Should sort into appropriate place
 
